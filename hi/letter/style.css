@@ -1,0 +1,115 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(-45deg, #b3d9ff, #99ccff, #cce6ff, #b3d9ff);
+    animation: gradient 12s cubic-bezier(0.25, 0.1, 0.25, 1) infinite;
+}
+
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.letter {
+    display: block;
+    width: 90%;
+    max-width: 750px;
+    position: relative;
+    perspective: 1000px;
+    line-height: 1.6;
+    font-size: 16px;
+    padding: 2em;
+    margin: 75px auto;
+    font-style: italic;
+    color: #444;
+    background: #f0f8ff;
+    background: linear-gradient(to bottom, #ffffff 0%, #e8f4ff 100%);
+    box-shadow: rgba(0,0,0,0.1) 0 -5px 20px, rgba(0,0,0,0.1) 0 0 2px;
+    z-index: 500;
+    border-radius: 12px;
+}
+
+.letter:before,
+.letter:after {
+    content: '';
+    display: block;
+    width: calc(100% + 6px);
+    margin-left: -3px;
+    padding-bottom: 75px;
+    background: #f0f8ff;
+    position: absolute;
+    z-index: 0;
+}
+
+.letter:before {
+    transform: rotateX(-30deg);
+    top: -72px;
+    left: 0;
+    background: linear-gradient(to bottom, #f0f8ff 0%, #d8eafd 100%);
+    box-shadow: rgba(0,0,0,0.1) 0 1px 1px;
+    border-top: 1px solid white;
+}
+
+.letter:after {
+    transform: rotateX(30deg);
+    bottom: -72px;
+    left: 0;
+    background: linear-gradient(to bottom, #e0f2ff 0%, #ffffff 100%);
+    box-shadow: rgba(0,0,0,0.1) 0 0 30px, rgba(0,0,0,0.1) 0 1px 2px;
+}
+
+@media (min-width: 500px) {
+    .letter:before,
+    .letter:after {
+        width: calc(100% + 10px);
+        margin-left: -5px;
+    }
+}
+
+@media (min-width: 700px) {
+    body {
+        padding: 30px 0;
+    }
+    .letter {
+        margin: 100px auto;
+    }
+    .letter:before,
+    .letter:after {
+        width: calc(100% + 18px);
+        margin-left: -9px;
+        padding-bottom: 100px;
+    }
+    .letter:before {
+        top: -97px;
+    }
+    .letter:after {
+        bottom: -97px;
+    }
+}
+
+@media (min-width: 900px) {
+    body {
+        padding: 50px 0;
+    }
+    .letter {
+        margin: 150px auto;
+    }
+    .letter:before,
+    .letter:after {
+        width: calc(100% + 28px);
+        margin-left: -14px;
+        padding-bottom: 150px;
+    }
+    .letter:before {
+        top: -147px;
+    }
+    .letter:after {
+        bottom: -147px;
+    }
+}
