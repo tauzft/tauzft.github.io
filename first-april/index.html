@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KYEJI'S ARCHIVES</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="floating-decor" aria-hidden="true">
+    <span class="d1">⚡</span>
+    <span class="d2">☁️</span>
+    <span class="d3">✦</span>
+    <span class="d4">🤝</span>
+    <span class="d5">🌿</span>
+    <span class="d6">📬</span>
+    <span class="d7">🌙</span>
+    <span class="d8">🍃</span>
+  </div>
+
+  <div class="page-wrap">
+    <header class="hero">
+      <div class="hero-eyebrow">✦ a little something for you ✦</div>
+
+      <h1>Hi, happy 1st of&nbsp;April!</h1>
+      <br />
+    </header>
+
+    <div class="finder-window">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="traffic">
+          <span class="red" title="Close"></span>
+          <span class="yellow" title="Minimize"></span>
+          <span class="green" title="Expand"></span>
+        </div>
+        <div class="sidebar-label">Finder</div>
+        <h2 class="sidebar-title">Recent</h2>
+        <nav class="side-nav">
+          <button class="side-link active">Recent</button>
+          <button class="side-link">Documents</button>
+          <button class="side-link">Pictures</button>
+          <button class="side-link">Videos</button>
+          <button class="side-link">Music</button>
+          <button class="side-link">Desktop</button>
+        </nav>
+        <div class="sidebar-footer">
+          <span class="sidebar-tag">🔒 Private</span>
+          <span class="sidebar-tag">💾 5 items</span>
+        </div>
+      </aside>
+
+      <!-- Main Content -->
+      <main class="main">
+
+        <!-- Landing grid view -->
+        <section class="landing-view" id="landingView">
+          <div class="topbar">
+            <div class="topbar-text">
+              <small>kyeji's archives</small>
+              <h2>Recent</h2>
+            </div>
+            <div class="tools">
+              <div class="search-box">
+                <span class="search-icon">⌕</span>
+                <input type="text" id="searchInput" placeholder="Search friend folder…" autocomplete="off" />
+              </div>
+              <button class="icon-btn" title="Grid view">⊞</button>
+              <button class="icon-btn" title="List view">☰</button>
+            </div>
+          </div>
+
+          <div class="folder-grid" id="folderGrid"></div>
+          <div class="empty-state" id="emptyState">
+            <span class="empty-icon">🔍</span>
+            <p>No folder found.<br>Try a different name.</p>
+          </div>
+        </section>
+
+        <!-- Friend detail view -->
+        <section class="friend-view" id="friendView">
+          <div class="panel">
+            <div class="panel-header">
+              <div>
+                <small>Photos</small>
+                <h3 id="friendTitle">For Aly</h3>
+              </div>
+              <button class="back-btn" id="backBtn">← Back to folders</button>
+            </div>
+            <div class="photo-wrap">
+              <img id="friendImage" src="" alt="Bouquet" />
+              <div class="photo-badge">🌸 Just for you</div>
+            </div>
+          </div>
+
+          <div class="message-stack">
+            <div class="message-card">
+              <div class="message-label">✦ Message</div>
+              <h4>Happy First Day of the Month!</h4>
+              <p id="friendMessage"></p>
+            </div>
+
+            <div class="message-card soft-card">
+              <div class="soft-card-icon">💝</div>
+              <p>
+                You can also add a playlist link, voice note, favorite memory, or a tiny hidden letter right here — just for the two of you.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Password Modal -->
+        <div class="modal" id="passwordModal" role="dialog" aria-modal="true" aria-labelledby="modalFriendName">
+          <div class="modal-box">
+            <div class="modal-head">
+              <div>
+                <small>Private folder</small>
+                <h3 id="modalFriendName">Aly</h3>
+              </div>
+              <button class="close-btn" id="closeModal" aria-label="Close">✕</button>
+            </div>
+            <div class="notice">
+              🔐 Enter the password to open this folder. Only you and your friend should know&nbsp;it.&nbsp;📁
+            </div>
+            <input
+              type="password"
+              class="password-input"
+              id="passwordInput"
+              placeholder="Enter your secret password…"
+              autocomplete="current-password"
+            />
+            <div class="error-msg" id="errorMsg" role="alert"></div>
+            <div class="modal-actions">
+              <button class="secondary-btn" id="cancelBtn">Cancel</button>
+              <button class="primary-btn" id="unlockBtn">✦ Unlock folder</button>
+            </div>
+          </div>
+        </div>
+
+      </main>
+    </div>
+
+    <p class="security-note">
+      <strong>Note:</strong> Find the folder that contains your name. The password is the one sent to you privately — it's personal to you. 📬
+    </p>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
