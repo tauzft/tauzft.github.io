@@ -29,6 +29,12 @@ const friends = [
     bouquet: "https://i.pinimg.com/736x/6d/a7/59/6da759b8600a739623e19c48f25afc81.jpg",
     message: "surprise! to my coolest dada, happy 1st day of april! i just wanted to remind you how amazing you are and how much you mean to me. thank you for always being there and for everything that you do. i hope this new month brings you lots of happiness and good moments. i love you always."
   },
+  {
+  "name": "Kaye",
+  "password": "hell nah",
+  "bouquet": "https://i.pinimg.com/736x/12/4c/29/124c29872eeb36c6a5679bfbe7c248c0.jpg",
+  "message": "to kaye, happy 1st day of april! i hope this new month brings you lots of happiness, good vibes, and fun moments. thank you for always being someone i can laugh with. stay awesome and take care always!"
+},
  {
   "name": "Kaze",
   "password": "bounce that d",
