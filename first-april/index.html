@@ -24,10 +24,8 @@
 
   <div class="page-wrap">
     <header class="hero">
-      <div class="hero-eyebrow">✦ a little something for you ✦</div>
-
-      <h1>Hi, happy 1st of&nbsp;April!</h1>
-      <br />
+        <h1 class="hero-title">KYEJI'S ARCHIVES</h1>
+        <p class="hero-subtitle">A private collection of tiny surprises.</p>
     </header>
 
     <div class="finder-window">
@@ -50,7 +48,7 @@
         </nav>
         <div class="sidebar-footer">
           <span class="sidebar-tag">🔒 Private</span>
-          <span class="sidebar-tag">💾 5 items</span>
+          <span class="sidebar-tag" id="itemCount">💾 0 items</span>
         </div>
       </aside>
 
@@ -87,7 +85,7 @@
             <div class="panel-header">
               <div>
                 <small>Photos</small>
-                <h3 id="friendTitle">For Aly</h3>
+                <h3 id="friendTitle">For You</h3>
               </div>
               <button class="back-btn" id="backBtn">← Back to folders</button>
             </div>
@@ -105,10 +103,20 @@
             </div>
 
             <div class="message-card soft-card">
-              <div class="soft-card-icon">💝</div>
-              <p>
-                You can also add a playlist link, voice note, favorite memory, or a tiny hidden letter right here — just for the two of you.
+              <div class="soft-card-icon">🎧</div>
+              <p style="margin-bottom:10px;">
+                I made this playlist for you—something you can listen to anytime.
               </p>
+
+              <iframe
+                style="border-radius:12px; margin-top:10px;"
+                src="https://open.spotify.com/embed/playlist/7fmw2nRPVh6VqKk1KFvEqx"
+                width="100%"
+                height="152"
+                frameborder="0"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                loading="lazy">
+              </iframe>
             </div>
           </div>
         </section>
@@ -119,7 +127,7 @@
             <div class="modal-head">
               <div>
                 <small>Private folder</small>
-                <h3 id="modalFriendName">Aly</h3>
+                <h3 id="modalFriendName">Ishi</h3>
               </div>
               <button class="close-btn" id="closeModal" aria-label="Close">✕</button>
             </div>

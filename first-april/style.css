@@ -416,6 +416,12 @@ body {
   gap: 22px;
 }
 
+iframe {
+  display: block;
+  width: 100%;
+  border: none;
+}
+
 /* Photo panel */
 .panel {
   background: rgba(255,255,255,0.9);
