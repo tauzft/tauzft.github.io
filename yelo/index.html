@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kyeji Finder</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --os-bg: #1e1e1e;
+      --window-bg: #2d2d2d;
+      --sidebar-bg: #252525;
+      --toolbar-bg: #3a3a3a;
+      --border: rgba(255,255,255,0.08);
+      --text-primary: #f0f0f0;
+      --text-secondary: rgba(255,255,255,0.45);
+      --text-tertiary: rgba(255,255,255,0.25);
+      --accent: #f5c842;
+      --accent-dim: rgba(245,200,66,0.13);
+      --sidebar-hover: rgba(255,255,255,0.06);
+      --content-bg: #282828;
+      --item-bg: #333333;
+      --item-border: rgba(255,255,255,0.06);
+    }
+
+    body {
+      background: #1a1a1a;
+      background-image:
+        radial-gradient(ellipse at 15% 10%, rgba(245,200,66,0.05) 0%, transparent 45%),
+        radial-gradient(ellipse at 85% 90%, rgba(245,200,66,0.04) 0%, transparent 45%),
+        radial-gradient(rgba(255,255,255,0.02) 1px, transparent 1px);
+      background-size: auto, auto, 28px 28px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      padding: 24px 16px;
+      color: var(--text-primary);
+    }
+
+    .page-wrap {
+      width: 100%;
+      max-width: 1080px;
+    }
+
+    .finder-window {
+      background: var(--window-bg);
+      border-radius: 14px;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.07);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .titlebar {
+      background: linear-gradient(180deg, #424242 0%, #383838 100%);
+      min-height: 56px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 14px;
+      border-bottom: 1px solid rgba(0,0,0,0.3);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .traffic-lights {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .tl {
+      width: 13px;
+      height: 13px;
+      border-radius: 50%;
+      cursor: default;
+      position: relative;
+    }
+
+    .tl-red { background: #ff5f57; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.3); }
+    .tl-yellow { background: #febc2e; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.3); }
+    .tl-green { background: #28c840; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.3); }
+
+    .titlebar-navbtns {
+      display: flex;
+      gap: 1px;
+      flex-shrink: 0;
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      color: rgba(255,255,255,0.4);
+      font-size: 20px;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 5px;
+      line-height: 1;
+      transition: color 0.1s, background 0.1s;
+      font-family: inherit;
+    }
+
+    .nav-btn:hover:not(:disabled) {
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+    }
+
+    .nav-btn:disabled {
+      opacity: 0.2;
+      cursor: default;
+    }
+
+    .titlebar-center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .titlebar-center-icon { font-size: 16px; }
+
+    .titlebar-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .search-pill {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .search-pill-icon {
+      position: absolute;
+      left: 9px;
+      color: rgba(255,255,255,0.3);
+      font-size: 12px;
+      pointer-events: none;
+    }
+
+    .search-pill input {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 7px;
+      height: 28px;
+      padding: 0 10px 0 28px;
+      font-size: 12px;
+      color: #fff;
+      font-family: inherit;
+      outline: none;
+      width: 180px;
+      transition: border-color 0.18s, background 0.18s;
+    }
+
+    .search-pill input::placeholder { color: rgba(255,255,255,0.28); }
+
+    .search-pill input:focus {
+      border-color: var(--accent);
+      background: rgba(245,200,66,0.08);
+    }
+
+    .window-body {
+      display: flex;
+      min-height: 560px;
+    }
+
+    .sidebar {
+      width: 200px;
+      flex-shrink: 0;
+      background: #262626;
+      border-right: 1px solid rgba(0,0,0,0.35);
+      padding: 10px 0;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .sb-section {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: rgba(255,255,255,0.22);
+      padding: 10px 14px 3px;
+    }
+
+    .sb-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      margin: 0 4px;
+      border-radius: 6px;
+      font-size: 13px;
+      color: var(--text-primary);
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.12s;
+    }
+
+    .sb-item:hover { background: var(--sidebar-hover); }
+    .sb-item.active { background: rgba(245,200,66,0.12); color: var(--accent); }
+
+    .sb-icon {
+      font-size: 14px;
+      width: 16px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .sb-divider {
+      height: 1px;
+      background: rgba(255,255,255,0.06);
+      margin: 7px 10px;
+    }
+
+    .sb-tags {
+      padding: 4px 14px 10px;
+      margin-top: auto;
+    }
+
+    .sb-tag {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      padding: 5px 0;
+      cursor: pointer;
+      transition: color 0.12s;
+    }
+
+    .sb-tag:hover { color: rgba(255,255,255,0.7); }
+
+    .sb-tag-dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .main-wrap {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      background: var(--content-bg);
+      overflow: hidden;
+      min-width: 0;
+    }
+
+    .path-bar {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 16px;
+      border-bottom: 1px solid rgba(0,0,0,0.25);
+      background: rgba(255,255,255,0.015);
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+
+    .path-crumb {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      padding: 2px 5px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .path-crumb:hover {
+      background: var(--sidebar-hover);
+      color: #fff;
+    }
+
+    .path-crumb.cur {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .path-sep {
+      color: rgba(255,255,255,0.18);
+      font-size: 11px;
+    }
+
+    .view-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 16px;
+      border-bottom: 1px solid rgba(0,0,0,0.25);
+      flex-shrink: 0;
+      gap: 10px;
+    }
+
+    .vt-count {
+      font-size: 12px;
+      color: rgba(255,255,255,0.38);
+    }
+
+    .vt-btns { display: flex; gap: 2px; }
+
+    .vt-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 5px;
+      font-size: 15px;
+      color: rgba(255,255,255,0.35);
+      transition: background 0.12s, color 0.12s;
+    }
+
+    .vt-btn:hover, .vt-btn.on {
+      background: var(--sidebar-hover);
+      color: #fff;
+    }
+
+    .list-header {
+      display: grid;
+      grid-template-columns: 1.8fr 0.8fr 1fr 70px;
+      padding: 6px 16px;
+      border-bottom: 1px solid rgba(0,0,0,0.2);
+      font-size: 11px;
+      color: rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.01);
+      flex-shrink: 0;
+      gap: 10px;
+    }
+
+    .lh-col {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .lh-col:hover { color: rgba(255,255,255,0.45); }
+    .lh-col.asc::after { content: ' ↑'; color: var(--accent); }
+
+    .items-area {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      min-width: 0;
+    }
+
+    .folder-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 8px;
+    }
+
+    .fi {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 8px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: center;
+      user-select: none;
+      transition: background 0.1s;
+      min-width: 0;
+    }
+
+    .fi:hover { background: rgba(255,255,255,0.06); }
+    .fi.sel { background: var(--accent-dim); }
+    .fi.sel .fi-name { color: var(--accent); }
+
+    .fi-icon-wrap {
+      position: relative;
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .fi-folder-svg {
+      position: absolute;
+      inset: 0;
+      width: 64px;
+      height: 64px;
+    }
+
+    .fi-emoji {
+      font-size: 22px;
+      position: relative;
+      z-index: 1;
+      margin-top: 8px;
+    }
+
+    .fi-name {
+      font-size: 12px;
+      color: var(--text-primary);
+      line-height: 1.35;
+      max-width: 100px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .list-view { display: none; }
+    .list-view.on { display: block; }
+
+    .li {
+      display: grid;
+      grid-template-columns: 22px 1.8fr 0.8fr 1fr 70px;
+      align-items: center;
+      padding: 7px 16px;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-primary);
+      cursor: pointer;
+      border-radius: 5px;
+      margin: 1px 0;
+      transition: background 0.1s;
+    }
+
+    .li:hover { background: rgba(255,255,255,0.05); }
+    .li.sel { background: var(--accent-dim); color: var(--accent); }
+
+    .li-icon {
+      font-size: 14px;
+      text-align: center;
+    }
+
+    .li-name {
+      font-weight: 400;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .li-kind, .li-date, .li-size {
+      font-size: 12px;
+      color: rgba(255,255,255,0.38);
+      min-width: 0;
+    }
+
+    .li.sel .li-kind,
+    .li.sel .li-date,
+    .li.sel .li-size {
+      color: rgba(245,200,66,0.5);
+    }
+
+    .empty-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      gap: 10px;
+      color: rgba(255,255,255,0.2);
+      text-align: center;
+    }
+
+    .empty-state.show { display: flex; }
+
+    .empty-state span { font-size: 36px; }
+    .empty-state p { font-size: 13px; }
+
+    .folder-view {
+      display: none;
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      min-width: 0;
+    }
+
+    .folder-view.on { display: block; }
+
+    .c-card {
+      background: var(--item-bg);
+      border: 1px solid var(--item-border);
+      border-radius: 12px;
+      margin-bottom: 14px;
+      overflow: hidden;
+      transition: border-color 0.18s;
+    }
+
+    .c-card:hover { border-color: rgba(245,200,66,0.18); }
+
+    .c-card-hd {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 14px 17px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      background: rgba(255,255,255,0.02);
+      flex-wrap: wrap;
+    }
+
+    .c-hd-icon { font-size: 17px; }
+
+    .c-hd-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      flex: 1;
+      min-width: 0;
+    }
+
+    .c-hd-sub {
+      font-size: 11px;
+      color: rgba(255,255,255,0.25);
+    }
+
+    .c-body { padding: 16px 17px; }
+
+    .song-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      flex-wrap: wrap;
+    }
+
+    .song-row:last-child { border-bottom: none; }
+
+    .song-thumb {
+      width: 42px;
+      height: 42px;
+      border-radius: 6px;
+      background: linear-gradient(135deg,#2a2000,#5a3d00);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .song-info {
+      flex: 1;
+      min-width: 160px;
+    }
+
+    .s-title {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .s-artist {
+      font-size: 12px;
+      color: rgba(255,255,255,0.38);
+      line-height: 1.5;
+    }
+
+    .s-links {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .s-link {
+      background: rgba(245,200,66,0.1);
+      border: 1px solid rgba(245,200,66,0.18);
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--accent);
+      text-decoration: none;
+      transition: background 0.13s;
+    }
+
+    .s-link:hover { background: rgba(245,200,66,0.2); }
+
+    .lyric-block {
+      background: rgba(245,200,66,0.05);
+      border: 1px solid rgba(245,200,66,0.1);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 15px;
+      margin-top: 14px;
+      font-size: 13px;
+      font-style: italic;
+      color: rgba(245,200,66,0.78);
+      line-height: 1.7;
+    }
+
+    .note-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.45);
+      line-height: 1.8;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .poem-text {
+      font-family: 'Georgia', serif;
+      font-size: 15px;
+      line-height: 2;
+      color: var(--text-primary);
+      white-space: normal;
+    }
+
+    .poem-em { color: var(--accent); }
+
+    .enc-box {
+      background: rgba(245,200,66,0.07);
+      border: 1px solid rgba(245,200,66,0.13);
+      border-radius: 10px;
+      padding: 14px 15px;
+      margin-top: 16px;
+      font-size: 13px;
+      color: rgba(245,200,66,0.88);
+      line-height: 1.7;
+    }
+
+    .detail-panel {
+      width: 0;
+      flex-shrink: 0;
+      overflow: hidden;
+      background: #2d2d2d;
+      border-left: 0 solid rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      transition: width 0.2s, border-left-width 0.2s;
+    }
+
+    .detail-panel.open {
+      width: 260px;
+      border-left-width: 1px;
+    }
+
+    .dp-inner {
+      width: 260px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      overflow-y: auto;
+    }
+
+    .dp-header {
+      padding: 18px 14px 13px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      text-align: center;
+    }
+
+    .dp-icon-wrap {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 8px;
+      position: relative;
+    }
+
+    .dp-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+      word-break: break-word;
+    }
+
+    .dp-kind {
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+    }
+
+    .dp-section {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .dp-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: rgba(255,255,255,0.22);
+      margin-bottom: 9px;
+    }
+
+    .dp-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 7px;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .dp-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.35);
+      flex-shrink: 0;
+    }
+
+    .dp-val {
+      font-size: 12px;
+      color: var(--text-primary);
+      text-align: right;
+      word-break: break-word;
+    }
+
+    .dp-preview {
+      padding: 12px 14px;
+      flex: 1;
+    }
+
+    .dp-preview-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: rgba(255,255,255,0.22);
+      margin-bottom: 8px;
+    }
+
+    .dp-preview-text {
+      font-size: 12.5px;
+      line-height: 1.8;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .dp-open-btn {
+      margin: 10px 14px 14px;
+      background: var(--accent);
+      color: #1a1000;
+      border: none;
+      border-radius: 7px;
+      height: 32px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: inherit;
+      transition: background 0.13s;
+      width: calc(100% - 28px);
+    }
+
+    .dp-open-btn:hover { background: #f7d060; }
+
+    .statusbar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 7px 16px;
+      border-top: 1px solid rgba(0,0,0,0.3);
+      background: #363636;
+      font-size: 11.5px;
+      color: rgba(255,255,255,0.3);
+      flex-shrink: 0;
+      text-align: center;
+      flex-wrap: wrap;
+    }
+
+    .sb-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.2);
+    }
+
+    @media (max-width: 900px) {
+      .detail-panel.open {
+        width: 220px;
+      }
+
+      .dp-inner {
+        width: 220px;
+      }
+
+      .search-pill input {
+        width: 140px;
+      }
+    }
+
+    @media (max-width: 680px) {
+      body {
+        padding: 12px;
+        align-items: stretch;
+      }
+
+      .page-wrap {
+        max-width: 100%;
+      }
+
+      .finder-window {
+        min-height: calc(100vh - 24px);
+        border-radius: 12px;
+      }
+
+      .window-body {
+        min-height: auto;
+      }
+
+      .sidebar,
+      .detail-panel {
+        display: none !important;
+      }
+
+      .titlebar {
+        padding: 10px 12px;
+        min-height: auto;
+        flex-wrap: wrap;
+        gap: 10px;
+      }
+
+      .titlebar-center {
+        position: static;
+        transform: none;
+        order: 3;
+        width: 100%;
+        justify-content: center;
+        pointer-events: auto;
+      }
+
+      .titlebar-right {
+        margin-left: 0;
+        flex: 1 1 100%;
+      }
+
+      .search-pill,
+      .search-pill input {
+        width: 100%;
+      }
+
+      .path-bar,
+      .view-toolbar,
+      .items-area,
+      .folder-view {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .folder-view {
+        padding-top: 18px;
+        padding-bottom: 18px;
+      }
+
+      .folder-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .fi-name {
+        max-width: 100%;
+      }
+
+      .song-row {
+        align-items: flex-start;
+      }
+
+      .song-info {
+        min-width: 0;
+        width: 100%;
+      }
+
+      .s-links {
+        width: 100%;
+      }
+
+      .c-card-hd {
+        align-items: flex-start;
+      }
+
+      .c-hd-title {
+        width: 100%;
+      }
+
+      .statusbar {
+        padding: 8px 12px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .folder-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .li {
+        grid-template-columns: 20px 1fr;
+        gap: 8px;
+      }
+
+      .li-kind,
+      .li-date,
+      .li-size,
+      .list-header {
+        display: none !important;
+      }
+
+      .items-area {
+        padding: 12px;
+      }
+
+      .folder-view {
+        padding: 16px 12px;
+      }
+
+      .c-body,
+      .c-card-hd {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .poem-text {
+        font-size: 14px;
+        line-height: 1.9;
+      }
+
+      .enc-box,
+      .note-text,
+      .lyric-block {
+        font-size: 12.5px;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrap">
+<div class="finder-window">
+
+  <div class="titlebar">
+    <div class="traffic-lights">
+      <div class="tl tl-red"></div>
+      <div class="tl tl-yellow"></div>
+      <div class="tl tl-green"></div>
+    </div>
+
+    <div class="titlebar-navbtns">
+      <button class="nav-btn" id="backBtn" disabled>‹</button>
+      <button class="nav-btn" id="fwdBtn" disabled>›</button>
+    </div>
+
+    <div class="titlebar-center">
+      <span class="titlebar-center-icon" id="tbIcon">📁</span>
+      <span id="tbTitle">Sylvan's Log</span>
+    </div>
+
+    <div class="titlebar-right">
+      <div class="search-pill">
+        <span class="search-pill-icon">🔍</span>
+        <input type="text" id="searchInput" placeholder="Search" autocomplete="off" />
+      </div>
+    </div>
+  </div>
+
+  <div class="window-body">
+    <aside class="sidebar">
+      <div class="sb-section">Favorites</div>
+      <div class="sb-item active" id="sbHome" onclick="goHome(this)"><span class="sb-icon">🏠</span> Home</div>
+      <div class="sb-item" onclick="sbClick(this)"><span class="sb-icon">🕒</span> Recents</div>
+      <div class="sb-item" onclick="sbClick(this)"><span class="sb-icon">🖥</span> Desktop</div>
+      <div class="sb-item" onclick="sbClick(this)"><span class="sb-icon">📄</span> Documents</div>
+
+      <div class="sb-divider"></div>
+
+      <div class="sb-section">Locations</div>
+      <div class="sb-item" onclick="sbClick(this)"><span class="sb-icon">💻</span> MacBook Air</div>
+      <div class="sb-item" onclick="sbClick(this)"><span class="sb-icon">☁️</span> iCloud Drive</div>
+
+      <div class="sb-divider"></div>
+
+      <div class="sb-section">Tags</div>
+      <div class="sb-tags">
+        <div class="sb-tag" onclick="tagFilter('yellow')"><span class="sb-tag-dot" style="background:#f5c842"></span>Yellow</div>
+        <div class="sb-tag" onclick="tagFilter('motivated')"><span class="sb-tag-dot" style="background:#f05c5c"></span>Motivated</div>
+      </div>
+    </aside>
+
+    <div class="main-wrap">
+      <div class="main">
+        <div class="path-bar" id="pathBar">
+          <span class="path-crumb cur">📁 Sylvan's</span>
+        </div>
+
+        <div class="view-toolbar">
+          <span class="vt-count" id="vtCount">2 items</span>
+          <div class="vt-btns">
+            <button class="vt-btn on" id="gridBtn" onclick="setView('grid',this)" title="Grid">⊞</button>
+            <button class="vt-btn" id="listBtn" onclick="setView('list',this)" title="List">☰</button>
+          </div>
+        </div>
+
+        <div class="list-header" id="listHeader" style="display:none;">
+          <div class="lh-col asc">Name</div>
+          <div class="lh-col">Kind</div>
+          <div class="lh-col">Date Modified</div>
+          <div class="lh-col">Size</div>
+        </div>
+
+        <div class="items-area" id="itemsArea">
+          <div class="folder-grid" id="fGrid"></div>
+          <div class="list-view" id="fList"></div>
+          <div class="empty-state" id="emptyState">
+            <span>🌼</span>
+            <p>No items found.</p>
+          </div>
+        </div>
+
+        <div class="folder-view" id="folderView"></div>
+
+        <div class="statusbar">
+          <span id="statusText">2 items</span>
+          <div class="sb-dot"></div>
+          <span>Sylvan's Log</span>
+        </div>
+      </div>
+
+      <div class="detail-panel" id="detailPanel">
+        <div class="dp-inner">
+          <div class="dp-header">
+            <div class="dp-icon-wrap" id="dpIconWrap"></div>
+            <div class="dp-name" id="dpName">—</div>
+            <div class="dp-kind" id="dpKind">Folder</div>
+          </div>
+
+          <div class="dp-section">
+            <div class="dp-section-title">Info</div>
+            <div class="dp-row"><span class="dp-label">Kind</span><span class="dp-val" id="dpInfoKind">—</span></div>
+            <div class="dp-row"><span class="dp-label">Items</span><span class="dp-val" id="dpItems">—</span></div>
+            <div class="dp-row"><span class="dp-label">Created</span><span class="dp-val">Apr 1, 2025</span></div>
+            <div class="dp-row"><span class="dp-label">Modified</span><span class="dp-val">Today</span></div>
+            <div class="dp-row"><span class="dp-label">Tag</span><span class="dp-val" id="dpTag">—</span></div>
+          </div>
+
+          <div class="dp-preview">
+            <div class="dp-preview-title">Preview</div>
+            <div class="dp-preview-text" id="dpPreview">Select an item to preview.</div>
+          </div>
+
+          <button class="dp-open-btn" id="dpOpenBtn">Open</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const FOLDERS = [
+  {
+    id:'yellow',
+    name:'Yellow',
+    icon:'',
+    color:'#f5c842',
+    tag:'Yellow',
+    tagColor:'#f5c842',
+    kind:'Music Folder',
+    items:'3 songs',
+    preview:'A warm, sunlit playlist featuring “Yellow” by Coldplay — a song that always reminds me of you.'
+  },
+  {
+    id:'motivated',
+    name:'Motivated',
+    icon:'',
+    color:'#f05c5c',
+    tag:'Motivated',
+    tagColor:'#f05c5c',
+    kind:'Poem Folder',
+    items:'1 poem',
+    preview:'A poem written for you — soft, steady, and full of light.'
+  },
+];
+
+let view = 'grid';
+let selected = null;
+let inFolder = false;
+let search = '';
+
+function folderSVG(color, size) {
+  size = size || 64;
+  const c = color || '#f5c842';
+  return `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="2" y="20" width="24" height="9" rx="3.5" fill="${c}" opacity="0.65"/>
+    <rect x="2" y="26" width="60" height="34" rx="6" fill="${c}" opacity="0.85"/>
+    <rect x="2" y="26" width="60" height="34" rx="6" fill="white" opacity="0.07"/>
+    <rect x="2" y="26" width="60" height="8" rx="0" ry="0" fill="${c}" opacity="0.3"/>
+    <rect x="2" y="26" width="60" height="8" rx="3" fill="${c}" opacity="0.5"/>
+  </svg>`;
+}
+
+function getFiltered() {
+  return FOLDERS.filter(f =>
+    f.name.toLowerCase().includes(search.toLowerCase()) ||
+    f.tag.toLowerCase().includes(search.toLowerCase())
+  );
+}
+
+function render() {
+  if (inFolder) return;
+
+  const items = getFiltered();
+  const empty = document.getElementById('emptyState');
+  const grid = document.getElementById('fGrid');
+  const list = document.getElementById('fList');
+
+  empty.classList.toggle('show', items.length === 0);
+  grid.style.display = view === 'grid' ? 'grid' : 'none';
+  list.style.display = 'none';
+  list.classList.remove('on');
+
+  grid.innerHTML = '';
+  items.forEach(f => {
+    const d = document.createElement('div');
+    d.className = 'fi' + (selected === f.id ? ' sel' : '');
+    d.dataset.id = f.id;
+    d.innerHTML = `
+      <div class="fi-icon-wrap">
+        <div class="fi-folder-svg">${folderSVG(f.color, 64)}</div>
+        <span class="fi-emoji">${f.icon}</span>
+      </div>
+      <div class="fi-name">${f.name}</div>`;
+    d.onclick = e => { e.stopPropagation(); selectItem(f.id); };
+    d.ondblclick = () => openFolder(f.id);
+    grid.appendChild(d);
+  });
+
+  list.innerHTML = '';
+  if (view === 'list') {
+    list.style.display = 'block';
+    list.classList.add('on');
+    grid.style.display = 'none';
+
+    items.forEach(f => {
+      const d = document.createElement('div');
+      d.className = 'li' + (selected === f.id ? ' sel' : '');
+      d.dataset.id = f.id;
+      d.innerHTML = `
+        <span class="li-icon">${f.icon}</span>
+        <span class="li-name">${f.name}</span>
+        <span class="li-kind">${f.kind}</span>
+        <span class="li-date">Today, 12:00 AM</span>
+        <span class="li-size">—</span>`;
+      d.onclick = e => { e.stopPropagation(); selectItem(f.id); };
+      d.ondblclick = () => openFolder(f.id);
+      list.appendChild(d);
+    });
+  }
+
+  const n = items.length;
+  document.getElementById('vtCount').textContent = n + ' item' + (n !== 1 ? 's' : '');
+  document.getElementById('statusText').textContent = n + ' item' + (n !== 1 ? 's' : '');
+}
+
+function setView(v, btn) {
+  view = v;
+  document.querySelectorAll('.vt-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('listHeader').style.display = v === 'list' ? 'grid' : 'none';
+  render();
+}
+
+function selectItem(id) {
+  selected = id;
+  render();
+  const f = FOLDERS.find(x => x.id === id);
+  if (!f) return;
+
+  const panel = document.getElementById('detailPanel');
+  panel.classList.add('open');
+
+  document.getElementById('dpIconWrap').innerHTML =
+    `<div style="position:relative;display:inline-block">
+      ${folderSVG(f.color, 72)}
+      <span style="position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font-size:24px">${f.icon}</span>
+    </div>`;
+
+  document.getElementById('dpName').textContent = f.name;
+  document.getElementById('dpKind').textContent = f.kind;
+  document.getElementById('dpInfoKind').textContent = f.kind;
+  document.getElementById('dpItems').textContent = f.items;
+  document.getElementById('dpTag').textContent = f.tag;
+  document.getElementById('dpTag').style.color = f.tagColor;
+  document.getElementById('dpPreview').textContent = f.preview;
+  document.getElementById('dpOpenBtn').onclick = () => openFolder(id);
+}
+
+function openFolder(id) {
+  inFolder = true;
+  selected = id;
+  const f = FOLDERS.find(x => x.id === id);
+
+  document.getElementById('itemsArea').style.display = 'none';
+  document.getElementById('listHeader').style.display = 'none';
+  document.getElementById('folderView').classList.add('on');
+  document.getElementById('detailPanel').classList.remove('open');
+  document.getElementById('backBtn').disabled = false;
+  document.getElementById('tbIcon').textContent = f.icon || '📁';
+  document.getElementById('tbTitle').textContent = f.name;
+  document.getElementById('vtCount').textContent = f.items;
+  document.getElementById('statusText').textContent = f.items + ' · ' + f.name;
+  document.getElementById('pathBar').innerHTML =
+    `<span class="path-crumb" onclick="goHome()">📁 Sylvan's</span>
+     <span class="path-sep">›</span>
+     <span class="path-crumb cur">${f.icon || '📁'} ${f.name}</span>`;
+
+  document.querySelectorAll('.sb-item').forEach(el => el.classList.remove('active'));
+  document.getElementById('folderView').innerHTML = buildContent(id);
+}
+
+function buildContent(id) {
+  if (id === 'yellow') return `
+    <div class="c-card">
+      <div class="c-card-hd">
+        <span class="c-hd-icon">🎧</span>
+        <span class="c-hd-title">Yellow · Coldplay</span>
+        <span class="c-hd-sub">Featured song</span>
+      </div>
+      <div class="c-body">
+        <div class="song-row">
+          <div class="song-thumb">🎵</div>
+          <div class="song-info">
+            <div class="s-title">Yellow</div>
+            <div class="s-artist">Coldplay · Parachutes (2000)</div>
+          </div>
+          <div class="s-links">
+            <a href="https://open.spotify.com/track/3AJwUDP919kvQ9QcozQPxg" target="_blank" class="s-link">Spotify</a>
+            <a href="https://www.youtube.com/watch?v=yKNxeF4KMsY" target="_blank" class="s-link">YouTube</a>
+          </div>
+        </div>
+
+        <div class="lyric-block">
+          "And it was all yellow. / I drew a line for you, oh what a thing to do."
+        </div>
+
+        <div class="note-text">
+          This song always reminds me of your light — warm, familiar, and easy to hold onto.
+        </div>
+      </div>
+    </div>
+
+    <div class="c-card">
+      <div class="c-card-hd">
+        <span class="c-hd-icon">🎶</span>
+        <span class="c-hd-title">More songs for you</span>
+      </div>
+      <div class="c-body">
+        <div class="song-row">
+          <div class="song-thumb">✨</div>
+          <div class="song-info">
+            <div class="s-title">Golden</div>
+            <div class="s-artist">Harry Styles</div>
+          </div>
+          <div class="s-links">
+            <a href="https://open.spotify.com/track/45S5WTQEGOB1VHr1Q4FuPl?si=04556222d0bb4143" target="_blank" class="s-link">Spotify</a>
+            <a href="https://youtu.be/enuYFtMHgfU?si=snRWTmd3xD8Cjq-E" target="_blank" class="s-link">YouTube</a>
+          </div>
+        </div>
+
+        <div class="song-row">
+          <div class="song-thumb">🌤</div>
+          <div class="song-info">
+            <div class="s-title">Mata sa Mata</div>
+            <div class="s-artist">7th</div>
+          </div>
+          <div class="s-links">
+            <a href="https://open.spotify.com/album/2AL1JJhTtaHbQ1in1z9hfl?si=Oo62kQ-QSnmxQpQHaW8GOg" target="_blank" class="s-link">Spotify</a>
+            <a href="https://youtu.be/WP6NWLn02rw?si=1UzCl9CySCoMU-hC" target="_blank" class="s-link">YouTube</a>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  if (id === 'motivated') return `
+    <div class="c-card">
+      <div class="c-card-hd">
+        <span class="c-hd-icon">📝</span>
+        <span class="c-hd-title">A poem for you</span>
+      </div>
+
+      <div class="c-body">
+        <div class="poem-text" style="text-align:center;">
+          Moments with you feel light and true,<br>
+          like skies that open into blue,<br>
+          each second soft, yet shining through.<br><br>
+
+          We laugh in ways that time can’t take,<br>
+          in quiet words and smiles we make,<br>
+          a simple joy I won’t forsake.<br><br>
+
+          And in each glance, in all we do,<br>
+          there’s something warm that always grew—<br>
+          I hold these moments close with you.
+        </div>
+
+        <div class="enc-box">
+          Being with you just feels easy, soft, and real — the kind of moments I always want to keep.
+        </div>
+      </div>
+    </div>`;
+
+  return '';
+}
+
+function goHome() {
+  inFolder = false;
+  selected = null;
+  document.getElementById('itemsArea').style.display = 'flex';
+  document.getElementById('folderView').classList.remove('on');
+  document.getElementById('backBtn').disabled = true;
+  document.getElementById('tbIcon').textContent = '📁';
+  document.getElementById('tbTitle').textContent = "Sylvan's Log";
+  document.getElementById('detailPanel').classList.remove('open');
+  document.getElementById('pathBar').innerHTML = `<span class="path-crumb cur">📁 Sylvan's</span>`;
+  document.getElementById('listHeader').style.display = view === 'list' ? 'grid' : 'none';
+  document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('sbHome').classList.add('active');
+  render();
+}
+
+function sbClick(el) {
+  document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  if (inFolder) goHome();
+}
+
+function tagFilter(tag) {
+  search = tag;
+  document.getElementById('searchInput').value = tag;
+  if (inFolder) goHome();
+  else render();
+}
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  search = e.target.value.toLowerCase();
+  if (inFolder) goHome();
+  else render();
+});
+
+document.getElementById('backBtn').addEventListener('click', () => {
+  if (inFolder) goHome();
+});
+
+document.getElementById('itemsArea').addEventListener('click', () => {
+  selected = null;
+  document.querySelectorAll('.fi,.li').forEach(el => el.classList.remove('sel'));
+  document.getElementById('detailPanel').classList.remove('open');
+});
+
+render();
+</script>
+</body>
+</html>
