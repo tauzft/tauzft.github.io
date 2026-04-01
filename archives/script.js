@@ -55,8 +55,8 @@ const friends = [
   },
   {
     name: "Wave",
-    password: "si kulit",
-    bouquet: "https://i.pinimg.com/736x/76/2a/bd/762abdf323b26531e66a241ddc35c295.jpg",
+    password: "kumain",
+    bouquet: "https://i.pinimg.com/1200x/2b/96/d4/2b96d45ea17cacdbeea94270aceefc20.jpg",
     message: "hi wave! you’re funny and witty, and i hope you never change. i wish you more happiness, success, and moments that make you genuinely smile this month. keep being you, it’s already more than enough. take care always"
   },
   {
