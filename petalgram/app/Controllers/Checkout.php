@@ -3,116 +3,105 @@
 namespace App\Controllers;
 
 use App\Models\OrderModel;
-use App\Models\PaymentModel;
+use App\Models\OrderItemModel;
+use App\Models\ProductModel;
 
 class Checkout extends BaseController
 {
-    protected $orderModel;
-    protected $paymentModel;
-
-    public function __construct()
-    {
-        $this->orderModel = new OrderModel();
-        $this->paymentModel = new PaymentModel();
-    }
-
     public function index()
     {
         $cart = session()->get('cart') ?? [];
         if (empty($cart)) {
             return redirect()->to('/cart')->with('error', 'Your cart is empty');
         }
-
-        $total = 0;
-        foreach ($cart as $item) {
-            $total += $item['price'] * $item['quantity'];
-        }
-
-        $data = [
-            'title' => 'Checkout - Petalgram',
-            'cart' => $cart,
-            'total' => $total,
-            'content' => 'checkout/index'
-        ];
-        return view('layouts/main', $data);
+        
+        $data['cart'] = $cart;
+        $data['total'] = $this->calculateTotal($cart);
+        $data['title'] = 'Checkout - Petalgram';
+        
+        return view('layouts/main', ['content' => view('checkout/index', $data)]);
     }
-
-    public function payment()
-    {
-        $cart = session()->get('cart') ?? [];
-        if (empty($cart)) {
-            return redirect()->to('/cart')->with('error', 'Your cart is empty');
-        }
-
-        $total = 0;
-        foreach ($cart as $item) {
-            $total += $item['price'] * $item['quantity'];
-        }
-
-        $data = [
-            'title' => 'Payment - Petalgram',
-            'cart' => $cart,
-            'total' => $total,
-            'content' => 'checkout/payment'
-        ];
-        return view('layouts/main', $data);
-    }
-
+    
     public function process()
     {
         $cart = session()->get('cart') ?? [];
         if (empty($cart)) {
             return redirect()->to('/cart')->with('error', 'Your cart is empty');
         }
-
+        
+        $orderModel = new OrderModel();
+        $orderItemModel = new OrderItemModel();
+        $productModel = new ProductModel();
+        
+        // Validate stock before processing
+        foreach ($cart as $item) {
+            $product = $productModel->find($item['id']);
+            if (!$product || $product['stock'] < $item['quantity']) {
+                return redirect()->back()->with('error', 'Not enough stock for ' . $item['name']);
+            }
+        }
+        
+        // Prepare order data
+        $orderData = [
+            'order_number' => $orderModel->generateOrderNumber(),
+            'customer_name' => $this->request->getPost('name'),
+            'customer_email' => $this->request->getPost('email'),
+            'customer_phone' => $this->request->getPost('phone'),
+            'delivery_address' => $this->request->getPost('address'),
+            'total_amount' => $this->calculateTotal($cart),
+            'status' => 'pending',
+            'payment_method' => 'messenger',
+            'payment_status' => 'pending',
+            'notes' => $this->request->getPost('notes') ?? ''
+        ];
+        
+        // Save order
+        $orderId = $orderModel->insert($orderData);
+        
+        // Save order items and update stock
+        foreach ($cart as $item) {
+            $orderItemModel->insert([
+                'order_id' => $orderId,
+                'product_id' => $item['id'],
+                'product_name' => $item['name'],
+                'quantity' => $item['quantity'],
+                'price' => $item['price']
+            ]);
+            
+            // Update stock
+            $product = $productModel->find($item['id']);
+            $productModel->update($item['id'], [
+                'stock' => $product['stock'] - $item['quantity']
+            ]);
+        }
+        
+        // Clear cart
+        session()->remove('cart');
+        
+        session()->setFlashdata('order_id', $orderId);
+        return redirect()->to('/checkout/success');
+    }
+    
+    public function success()
+    {
+        $orderId = session()->getFlashdata('order_id');
+        if (!$orderId) {
+            return redirect()->to('/');
+        }
+        
+        $orderModel = new OrderModel();
+        $data['order'] = $orderModel->find($orderId);
+        $data['title'] = 'Order Success - Petalgram';
+        
+        return view('layouts/main', ['content' => view('checkout/success', $data)]);
+    }
+    
+    private function calculateTotal($cart)
+    {
         $total = 0;
         foreach ($cart as $item) {
             $total += $item['price'] * $item['quantity'];
         }
-
-        $orderId = $this->orderModel->createOrder([
-            'user_id' => session()->get('user_id'),
-            'items' => array_map(function ($item) {
-                return [
-                    'product_id' => $item['id'],
-                    'quantity' => $item['quantity'],
-                    'price' => $item['price']
-                ];
-            }, $cart),
-            'total' => $total,
-            'shipping_address' => [
-                'name' => $this->request->getPost('name'),
-                'address' => $this->request->getPost('address'),
-                'city' => $this->request->getPost('city'),
-                'zip_code' => $this->request->getPost('zip_code')
-            ],
-            'contact_info' => [
-                'email' => $this->request->getPost('email'),
-                'phone' => $this->request->getPost('phone')
-            ]
-        ]);
-
-        if ($orderId) {
-            $this->paymentModel->createPayment([
-                'order_id' => $orderId,
-                'amount' => $total,
-                'method' => $this->request->getPost('payment_method'),
-                'status' => 'completed'
-            ]);
-            session()->set('cart', []);
-            return redirect()->to('/checkout/success/' . $orderId);
-        }
-
-        return redirect()->to('/checkout')->with('error', 'Failed to process order');
-    }
-
-    public function success($orderId)
-    {
-        $data = [
-            'title' => 'Order Success - Petalgram',
-            'orderId' => $orderId,
-            'content' => 'checkout/success'
-        ];
-        return view('layouts/main', $data);
+        return $total;
     }
 }

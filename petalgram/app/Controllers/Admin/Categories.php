@@ -7,57 +7,78 @@ use App\Models\CategoryModel;
 
 class Categories extends BaseController
 {
-    protected $categoryModel;
-
-    public function __construct()
-    {
-        $this->categoryModel = new CategoryModel();
-    }
-
     public function index()
     {
-        if (session()->get('user_role') !== 'admin') {
-            return redirect()->to('/login');
-        }
-
-        $data = [
-            'title' => 'Manage Categories - Petalgram',
-            'categories' => $this->categoryModel->getAll(),
-            'content' => 'admin/categories'
-        ];
-        return view('layouts/main', $data);
+        $categoryModel = new CategoryModel();
+        $data['categories'] = $categoryModel->findAll();
+        return view('admin/layouts/main', ['content' => view('admin/categories/index', $data)]);
     }
-
+    
     public function add()
     {
-        if (session()->get('user_role') !== 'admin') {
-            return redirect()->to('/login');
+        if ($this->request->getMethod() === 'post') {
+            $categoryModel = new CategoryModel();
+            
+            $rules = [
+                'name' => 'required|min_length[2]|is_unique[categories.name]'
+            ];
+            
+            if ($this->validate($rules)) {
+                $categoryModel->save([
+                    'name' => $this->request->getPost('name'),
+                    'description' => $this->request->getPost('description'),
+                    'icon' => $this->request->getPost('icon') ?? '🌸'
+                ]);
+                
+                return redirect()->to('/admin/categories')->with('success', 'Category added successfully');
+            } else {
+                return redirect()->back()->with('errors', $this->validator->getErrors());
+            }
         }
-        $this->categoryModel->createCategory([
-            'name' => $this->request->getPost('name'),
-            'description' => $this->request->getPost('description')
-        ]);
-        return redirect()->to('/admin/categories')->with('success', 'Category added');
+        
+        return view('admin/layouts/main', ['content' => view('admin/categories/form')]);
     }
-
+    
     public function edit($id)
     {
-        if (session()->get('user_role') !== 'admin') {
-            return redirect()->to('/login');
+        $categoryModel = new CategoryModel();
+        $data['category'] = $categoryModel->find($id);
+        
+        if (!$data['category']) {
+            return redirect()->to('/admin/categories')->with('error', 'Category not found');
         }
-        $this->categoryModel->updateCategory($id, [
-            'name' => $this->request->getPost('name'),
-            'description' => $this->request->getPost('description')
-        ]);
-        return redirect()->to('/admin/categories')->with('success', 'Category updated');
+        
+        if ($this->request->getMethod() === 'post') {
+            $rules = [
+                'name' => 'required|min_length[2]|is_unique[categories.name,' . $id . ']'
+            ];
+            
+            if ($this->validate($rules)) {
+                $categoryModel->update($id, [
+                    'name' => $this->request->getPost('name'),
+                    'description' => $this->request->getPost('description'),
+                    'icon' => $this->request->getPost('icon') ?? '🌸'
+                ]);
+                
+                return redirect()->to('/admin/categories')->with('success', 'Category updated successfully');
+            } else {
+                $data['errors'] = $this->validator->getErrors();
+            }
+        }
+        
+        return view('admin/layouts/main', ['content' => view('admin/categories/form', $data)]);
     }
-
+    
     public function delete($id)
     {
-        if (session()->get('user_role') !== 'admin') {
-            return redirect()->to('/login');
+        $categoryModel = new CategoryModel();
+        $category = $categoryModel->find($id);
+        
+        if ($category) {
+            $categoryModel->delete($id);
+            return redirect()->to('/admin/categories')->with('success', 'Category deleted successfully');
         }
-        $this->categoryModel->deleteCategory($id);
-        return redirect()->to('/admin/categories')->with('success', 'Category deleted');
+        
+        return redirect()->to('/admin/categories')->with('error', 'Category not found');
     }
 }

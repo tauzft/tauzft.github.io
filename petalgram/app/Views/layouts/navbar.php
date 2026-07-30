@@ -1,22 +1,31 @@
 <nav class="navbar">
     <div class="container">
-        <ul class="nav-menu">
-            <li><a href="/">Home</a></li>
-            <li><a href="/shop">Shop</a></li>
-            <li><a href="/cart">Cart</a></li>
-            <li><a href="/order/track">Track Order</a></li>
-            <?php if (session()->get('logged_in')): ?>
-                <li><a href="/orders">My Orders</a></li>
-                <li><a href="/messages">Messages</a></li>
-                <li><a href="/profile"><?= esc(session()->get('user_name')) ?></a></li>
-                <?php if (session()->get('user_role') === 'admin'): ?>
-                    <li><a href="/admin">Admin</a></li>
-                <?php endif; ?>
-                <li><a href="/logout">Logout</a></li>
+        <div class="logo">
+            <i class="fas fa-seedling"></i> Petalgram
+        </div>
+        <div class="nav-links">
+            <a href="<?= base_url('/') ?>"><i class="fas fa-home"></i> Home</a>
+            <a href="<?= base_url('shop') ?>"><i class="fas fa-store"></i> Shop</a>
+            <a href="<?= base_url('cart') ?>" class="cart-icon">
+                <i class="fas fa-shopping-bag"></i> 
+                <span id="cart-count">
+                    <?php 
+                        $cart = session()->get('cart') ?? [];
+                        echo array_sum(array_column($cart, 'quantity'));
+                    ?>
+                </span>
+            </a>
+            <?php if (session()->get('isLoggedIn')): ?>
+                <a href="<?= base_url('profile') ?>"><i class="fas fa-user"></i> Profile</a>
+                <a href="<?= base_url('logout') ?>" class="btn-outline">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </a>
             <?php else: ?>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/register">Register</a></li>
+                <a href="<?= base_url('login') ?>" class="btn-outline">
+                    <i class="fas fa-sign-in-alt"></i> Login
+                </a>
+                <a href="<?= base_url('register') ?>" class="btn-primary">Register</a>
             <?php endif; ?>
-        </ul>
+        </div>
     </div>
 </nav>

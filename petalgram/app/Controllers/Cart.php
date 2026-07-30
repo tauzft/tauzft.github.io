@@ -6,102 +6,118 @@ use App\Models\ProductModel;
 
 class Cart extends BaseController
 {
-    protected $productModel;
-
-    public function __construct()
-    {
-        $this->productModel = new ProductModel();
-    }
-
     public function index()
     {
         $cart = session()->get('cart') ?? [];
-        $total = 0;
-        foreach ($cart as $item) {
-            $total += $item['price'] * $item['quantity'];
-        }
-
-        $data = [
-            'title' => 'Cart - Petalgram',
-            'cart' => $cart,
-            'total' => $total,
-            'content' => 'cart/index'
-        ];
-        return view('layouts/main', $data);
+        $data['cart'] = $cart;
+        $data['total'] = $this->calculateTotal($cart);
+        $data['title'] = 'Cart - Petalgram';
+        
+        return view('layouts/main', ['content' => view('cart/index', $data)]);
     }
-
+    
     public function add()
     {
         $productId = $this->request->getPost('product_id');
         $quantity = $this->request->getPost('quantity') ?? 1;
-
-        $product = $this->productModel->getById($productId);
+        
+        $productModel = new ProductModel();
+        $product = $productModel->find($productId);
+        
         if (!$product) {
-            return redirect()->back()->with('error', 'Product not found');
+            return $this->response->setJSON(['success' => false, 'message' => 'Product not found']);
         }
-
+        
+        if ($product['stock'] < $quantity) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Insufficient stock']);
+        }
+        
         $cart = session()->get('cart') ?? [];
-        $found = false;
-
-        foreach ($cart as &$item) {
-            if ($item['id'] == $productId) {
-                $item['quantity'] += $quantity;
-                $found = true;
-                break;
+        
+        if (isset($cart[$productId])) {
+            $newQuantity = $cart[$productId]['quantity'] + $quantity;
+            if ($newQuantity > $product['stock']) {
+                return $this->response->setJSON(['success' => false, 'message' => 'Not enough stock available']);
             }
-        }
-        unset($item);
-
-        if (!$found) {
-            $cart[] = [
-                'id' => $product->id,
-                'name' => $product->name,
-                'price' => $product->price,
-                'image' => $product->image,
+            $cart[$productId]['quantity'] = $newQuantity;
+        } else {
+            $cart[$productId] = [
+                'id' => $product['id'],
+                'name' => $product['name'],
+                'price' => $product['price'],
+                'image' => $product['image'],
+                'stock' => $product['stock'],
                 'quantity' => $quantity
             ];
         }
-
+        
         session()->set('cart', $cart);
-        return redirect()->back()->with('success', 'Product added to cart');
+        
+        return $this->response->setJSON([
+            'success' => true,
+            'message' => 'Added to cart',
+            'cart_count' => array_sum(array_column($cart, 'quantity'))
+        ]);
     }
-
-    public function update($id)
+    
+    public function update()
     {
-        $quantity = $this->request->getPost('quantity');
+        $productId = $this->request->getPost('product_id');
+        $quantity = (int)$this->request->getPost('quantity');
+        
         $cart = session()->get('cart') ?? [];
-
-        foreach ($cart as $key => &$item) {
-            if ($item['id'] == $id) {
-                if ($quantity <= 0) {
-                    unset($cart[$key]);
-                } else {
-                    $item['quantity'] = $quantity;
-                }
-                break;
-            }
+        
+        if (!isset($cart[$productId])) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Product not in cart']);
         }
-        unset($item);
-
-        session()->set('cart', array_values($cart));
-        return redirect()->to('/cart')->with('success', 'Cart updated');
-    }
-
-    public function remove($id)
-    {
-        $cart = session()->get('cart') ?? [];
-        $cart = array_filter($cart, function ($item) use ($id) {
-            return $item['id'] != $id;
-        });
-        $cart = array_values($cart);
-
+        
+        $productModel = new ProductModel();
+        $product = $productModel->find($productId);
+        
+        if ($quantity > $product['stock']) {
+            return $this->response->setJSON(['success' => false, 'message' => 'Not enough stock']);
+        }
+        
+        if ($quantity <= 0) {
+            unset($cart[$productId]);
+        } else {
+            $cart[$productId]['quantity'] = $quantity;
+        }
+        
         session()->set('cart', $cart);
-        return redirect()->to('/cart')->with('success', 'Item removed from cart');
+        
+        return $this->response->setJSON([
+            'success' => true,
+            'cart_count' => array_sum(array_column($cart, 'quantity')),
+            'total' => $this->calculateTotal($cart)
+        ]);
     }
-
-    public function empty()
+    
+    public function remove()
     {
-        session()->set('cart', []);
-        return redirect()->to('/cart')->with('success', 'Cart emptied');
+        $productId = $this->request->getPost('product_id');
+        $cart = session()->get('cart') ?? [];
+        unset($cart[$productId]);
+        session()->set('cart', $cart);
+        
+        return $this->response->setJSON([
+            'success' => true,
+            'cart_count' => array_sum(array_column($cart, 'quantity'))
+        ]);
+    }
+    
+    public function clear()
+    {
+        session()->remove('cart');
+        return $this->response->setJSON(['success' => true]);
+    }
+    
+    private function calculateTotal($cart)
+    {
+        $total = 0;
+        foreach ($cart as $item) {
+            $total += $item['price'] * $item['quantity'];
+        }
+        return $total;
     }
 }

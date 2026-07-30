@@ -1,42 +1,61 @@
-<div class="shop">
-    <div class="container">
-        <h1>Our Flowers</h1>
+<?= $this->extend('layouts/main') ?>
 
-        <form class="search-bar" action="/shop" method="GET">
-            <input type="text" name="q" placeholder="Search flowers..." value="<?= esc($searchQuery ?? '') ?>">
-            <button type="submit" class="btn">Search</button>
-        </form>
+<?= $this->section('content') ?>
+<div class="shop-header">
+    <h1><i class="fas fa-store"></i> Our Shop</h1>
+    <p>Browse our beautiful collection of fresh flowers</p>
+</div>
 
-        <div class="category-filter">
-            <a href="/shop" class="<?= !$selectedCategory ? 'active' : '' ?>">All</a>
-            <?php foreach ($categories as $category): ?>
-                <a href="/shop?category=<?= $category->id ?>"
-                   class="<?= $selectedCategory == $category->id ? 'active' : '' ?>">
-                    <?= esc($category->name) ?>
-                </a>
-            <?php endforeach; ?>
-        </div>
+<!-- Categories Filter -->
+<div class="category-filters">
+    <a href="<?= base_url('shop') ?>" class="filter-btn <?= !isset($category) ? 'active' : '' ?>">
+        All
+    </a>
+    <?php foreach ($categories as $cat): ?>
+    <a href="<?= base_url('shop/category/' . $cat['id']) ?>" 
+       class="filter-btn <?= isset($category) && $category['id'] == $cat['id'] ? 'active' : '' ?>">
+        <?= $cat['icon'] ?? '📂' ?> <?= $cat['name'] ?>
+    </a>
+    <?php endforeach; ?>
+</div>
 
-        <div class="products-grid">
-            <?php if (empty($products)): ?>
-                <p class="no-results">No products found.</p>
+<?php if (isset($category)): ?>
+    <div class="category-title">
+        <h2><?= $category['icon'] ?? '' ?> <?= $category['name'] ?></h2>
+        <p><?= $category['description'] ?? '' ?></p>
+    </div>
+<?php endif; ?>
+
+<div class="product-grid">
+    <?php if (!empty($products)): ?>
+        <?php foreach ($products as $product): ?>
+        <div class="product-card">
+            <a href="<?= base_url('product/' . $product['id']) ?>" class="product-link">
+                <div class="product-image"><?= $product['image'] ?? '🌸' ?></div>
+                <h4><?= $product['name'] ?></h4>
+                <p class="description"><?= substr($product['description'] ?? '', 0, 50) ?>...</p>
+                <div class="price">$<?= number_format($product['price'], 2) ?></div>
+                <div class="stock-info <?= $product['stock'] > 10 ? 'in-stock' : ($product['stock'] > 0 ? 'low-stock' : 'out-of-stock') ?>">
+                    <?= $product['stock'] > 0 ? $product['stock'] . ' in stock' : 'Out of stock' ?>
+                </div>
+            </a>
+            <?php if ($product['stock'] > 0): ?>
+            <button class="btn-add add-to-cart" data-id="<?= $product['id'] ?>">
+                <i class="fas fa-plus-circle"></i> Add to cart
+            </button>
             <?php else: ?>
-                <?php foreach ($products as $product): ?>
-                    <div class="product-card">
-                        <a href="/product/<?= $product->id ?>">
-                            <img src="/uploads/products/<?= esc($product->image) ?>" alt="<?= esc($product->name) ?>">
-                        </a>
-                        <div class="product-info">
-                            <h3><a href="/product/<?= $product->id ?>"><?= esc($product->name) ?></a></h3>
-                            <p class="product-price">$<?= number_format($product->price, 2) ?></p>
-                            <form action="/cart/add" method="POST">
-                                <input type="hidden" name="product_id" value="<?= $product->id ?>">
-                                <button type="submit" class="btn btn-primary">Add to Cart</button>
-                            </form>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
+            <button class="btn-add" disabled style="opacity:0.5; cursor:not-allowed;">
+                <i class="fas fa-times-circle"></i> Out of stock
+            </button>
             <?php endif; ?>
         </div>
-    </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <div class="empty-state">
+            <i class="fas fa-flower" style="font-size:3rem; color:#d4c4e0;"></i>
+            <h3>No products found</h3>
+            <p>Check back later for new arrivals!</p>
+        </div>
+    <?php endif; ?>
 </div>
+<?= $this->endSection() ?>

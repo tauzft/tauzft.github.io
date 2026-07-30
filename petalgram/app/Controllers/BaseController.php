@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use CodeIgniter\HTTP\Controllers;
+use CodeIgniter\Controller;
 
 class BaseController extends Controller
 {

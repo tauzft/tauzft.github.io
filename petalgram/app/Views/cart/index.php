@@ -1,64 +1,54 @@
-<div class="cart">
-    <div class="container">
-        <h1>Shopping Cart</h1>
+<?= $this->extend('layouts/main') ?>
 
-        <?php if (empty($cart)): ?>
-            <div class="empty-cart">
-                <p>Your cart is empty.</p>
-                <a href="/shop" class="btn btn-primary">Continue Shopping</a>
-            </div>
-        <?php else: ?>
-            <div class="cart-content">
-                <div class="cart-items">
-                    <?php foreach ($cart as $item): ?>
-                        <div class="cart-item">
-                            <img src="/uploads/products/<?= esc($item['image']) ?>" alt="<?= esc($item['name']) ?>">
-                            <div class="cart-item-details">
-                                <h3><?= esc($item['name']) ?></h3>
-                                <p class="cart-item-price">$<?= number_format($item['price'], 2) ?></p>
-                                <div class="cart-item-quantity">
-                                    <form action="/cart/update/<?= $item['id'] ?>" method="POST" style="display:inline">
-                                        <input type="hidden" name="quantity" value="<?= $item['quantity'] - 1 ?>">
-                                        <button type="submit" class="btn-small">-</button>
-                                    </form>
-                                    <span><?= $item['quantity'] ?></span>
-                                    <form action="/cart/update/<?= $item['id'] ?>" method="POST" style="display:inline">
-                                        <input type="hidden" name="quantity" value="<?= $item['quantity'] + 1 ?>">
-                                        <button type="submit" class="btn-small">+</button>
-                                    </form>
-                                </div>
-                            </div>
-                            <form action="/cart/remove/<?= $item['id'] ?>" method="POST">
-                                <button type="submit" class="btn btn-danger btn-small">Remove</button>
-                            </form>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-
-                <div class="order-summary">
-                    <h2>Order Summary</h2>
-                    <div class="summary-items">
-                        <?php foreach ($cart as $item): ?>
-                            <div class="summary-item">
-                                <span><?= esc($item['name']) ?> x <?= $item['quantity'] ?></span>
-                                <span>$<?= number_format($item['price'] * $item['quantity'], 2) ?></span>
-                            </div>
-                        <?php endforeach; ?>
-                    </div>
-                    <div class="summary-total">
-                        <span>Total:</span>
-                        <span>$<?= number_format($total, 2) ?></span>
-                    </div>
-                    <a href="/checkout" class="btn btn-primary">Proceed to Checkout</a>
-                </div>
-            </div>
-
-            <div class="cart-actions">
-                <a href="/shop" class="btn">Continue Shopping</a>
-                <form action="/cart/empty" method="POST" style="display:inline">
-                    <button type="submit" class="btn btn-danger">Empty Cart</button>
-                </form>
-            </div>
-        <?php endif; ?>
-    </div>
+<?= $this->section('content') ?>
+<div class="section-title">
+    <i class="fas fa-shopping-bag"></i> Your Cart
 </div>
+
+<?php if (empty($cart)): ?>
+    <div class="empty-cart">
+        <i class="fas fa-shopping-bag" style="font-size:4rem; color:#d4c4e0;"></i>
+        <h3>Your cart is empty</h3>
+        <p>Browse our beautiful flowers and add some to your cart!</p>
+        <a href="<?= base_url('shop') ?>" class="btn-primary">Start Shopping</a>
+    </div>
+<?php else: ?>
+    <div id="cartContainer">
+        <?php foreach ($cart as $id => $item): ?>
+        <div class="cart-item" data-id="<?= $id ?>">
+            <div class="item-info">
+                <span style="font-size:2.5rem;"><?= $item['image'] ?? '🌸' ?></span>
+                <div>
+                    <h4><?= $item['name'] ?></h4>
+                    <span class="price">$<?= number_format($item['price'], 2) ?></span>
+                    <span class="stock-info">(<?= $item['stock'] ?? 0 ?> available)</span>
+                </div>
+            </div>
+            <div class="qty-control">
+                <button class="qty-btn" data-id="<?= $id ?>" data-change="-1">−</button>
+                <span class="qty"><?= $item['quantity'] ?></span>
+                <button class="qty-btn" data-id="<?= $id ?>" data-change="1">+</button>
+                <button class="remove-btn" data-id="<?= $id ?>">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </div>
+        </div>
+        <?php endforeach; ?>
+        
+        <div class="cart-summary">
+            <div class="cart-total">
+                <span>Total</span>
+                <span id="cartTotal">$<?= number_format($total, 2) ?></span>
+            </div>
+            <div class="checkout-actions">
+                <a href="<?= base_url('checkout') ?>" class="btn-primary">
+                    <i class="fas fa-credit-card"></i> Proceed to Checkout
+                </a>
+                <button id="clearCart" class="btn-outline">
+                    <i class="fas fa-trash-alt"></i> Clear Cart
+                </button>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+<?= $this->endSection() ?>

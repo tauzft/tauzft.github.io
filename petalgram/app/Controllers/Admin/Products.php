@@ -8,104 +8,100 @@ use App\Models\CategoryModel;
 
 class Products extends BaseController
 {
-    protected $productModel;
-    protected $categoryModel;
-
-    public function __construct()
-    {
-        $this->productModel = new ProductModel();
-        $this->categoryModel = new CategoryModel();
-    }
-
     public function index()
     {
-        if (session()->get('user_role') !== 'admin') {
-            return redirect()->to('/login');
-        }
-
-        $data = [
-            'title' => 'Manage Products - Petalgram',
-            'products' => $this->productModel->getAll(),
-            'content' => 'admin/products'
-        ];
-        return view('layouts/main', $data);
+        $productModel = new ProductModel();
+        $data['products'] = $productModel->getProductsWithCategory();
+        return view('admin/layouts/main', ['content' => view('admin/products/index', $data)]);
     }
-
+    
     public function add()
     {
-        if (session()->get('user_role') !== 'admin') {
-            return redirect()->to('/login');
-        }
-
+        $categoryModel = new CategoryModel();
+        $data['categories'] = $categoryModel->findAll();
+        $data['action'] = 'add';
+        
         if ($this->request->getMethod() === 'post') {
-            $image = $this->request->getFile('image');
-            $imageName = '';
-            if ($image && $image->isValid()) {
-                $imageName = $image->getRandomName();
-                $image->move(WRITEPATH . 'uploads', $imageName);
+            $productModel = new ProductModel();
+            
+            $rules = [
+                'name' => 'required|min_length[3]',
+                'price' => 'required|numeric',
+                'stock' => 'required|numeric',
+                'category_id' => 'required|numeric'
+            ];
+            
+            if ($this->validate($rules)) {
+                $productModel->save([
+                    'name' => $this->request->getPost('name'),
+                    'description' => $this->request->getPost('description'),
+                    'price' => $this->request->getPost('price'),
+                    'image' => $this->request->getPost('image') ?? '🌸',
+                    'category_id' => $this->request->getPost('category_id'),
+                    'stock' => $this->request->getPost('stock'),
+                    'status' => $this->request->getPost('status') ?? 'active'
+                ]);
+                
+                return redirect()->to('/admin/products')->with('success', 'Product added successfully');
+            } else {
+                $data['errors'] = $this->validator->getErrors();
             }
-
-            $this->productModel->insert([
-                'name' => $this->request->getPost('name'),
-                'description' => $this->request->getPost('description'),
-                'price' => $this->request->getPost('price'),
-                'image' => $imageName,
-                'stock' => $this->request->getPost('stock'),
-                'category_id' => $this->request->getPost('category_id')
-            ]);
-            return redirect()->to('/admin/products')->with('success', 'Product added');
         }
-
-        $data = [
-            'title' => 'Add Product - Petalgram',
-            'categories' => $this->categoryModel->getAll(),
-            'content' => 'admin/products'
-        ];
-        return view('layouts/main', $data);
+        
+        return view('admin/layouts/main', ['content' => view('admin/products/form', $data)]);
     }
-
+    
     public function edit($id)
     {
-        if (session()->get('user_role') !== 'admin') {
-            return redirect()->to('/login');
+        $productModel = new ProductModel();
+        $categoryModel = new CategoryModel();
+        
+        $data['product'] = $productModel->find($id);
+        $data['categories'] = $categoryModel->findAll();
+        $data['action'] = 'edit';
+        
+        if (!$data['product']) {
+            return redirect()->to('/admin/products')->with('error', 'Product not found');
         }
-
-        $product = $this->productModel->getById($id);
-
+        
         if ($this->request->getMethod() === 'post') {
-            $image = $this->request->getFile('image');
-            $imageName = $product->image;
-            if ($image && $image->isValid()) {
-                $imageName = $image->getRandomName();
-                $image->move(WRITEPATH . 'uploads', $imageName);
+            $rules = [
+                'name' => 'required|min_length[3]',
+                'price' => 'required|numeric',
+                'stock' => 'required|numeric',
+                'category_id' => 'required|numeric'
+            ];
+            
+            if ($this->validate($rules)) {
+                $productModel->update($id, [
+                    'name' => $this->request->getPost('name'),
+                    'description' => $this->request->getPost('description'),
+                    'price' => $this->request->getPost('price'),
+                    'image' => $this->request->getPost('image') ?? '🌸',
+                    'category_id' => $this->request->getPost('category_id'),
+                    'stock' => $this->request->getPost('stock'),
+                    'status' => $this->request->getPost('status') ?? 'active'
+                ]);
+                
+                return redirect()->to('/admin/products')->with('success', 'Product updated successfully');
+            } else {
+                $data['errors'] = $this->validator->getErrors();
             }
-
-            $this->productModel->update($id, [
-                'name' => $this->request->getPost('name'),
-                'description' => $this->request->getPost('description'),
-                'price' => $this->request->getPost('price'),
-                'image' => $imageName,
-                'stock' => $this->request->getPost('stock'),
-                'category_id' => $this->request->getPost('category_id')
-            ]);
-            return redirect()->to('/admin/products')->with('success', 'Product updated');
         }
-
-        $data = [
-            'title' => 'Edit Product - Petalgram',
-            'product' => $product,
-            'categories' => $this->categoryModel->getAll(),
-            'content' => 'admin/products'
-        ];
-        return view('layouts/main', $data);
+        
+        return view('admin/layouts/main', ['content' => view('admin/products/form', $data)]);
     }
-
+    
     public function delete($id)
     {
-        if (session()->get('user_role') !== 'admin') {
-            return redirect()->to('/login');
+        $productModel = new ProductModel();
+        $product = $productModel->find($id);
+        
+        if ($product) {
+            $productModel->delete($id);
+            return redirect()->to('/admin/products')->with('success', 'Product deleted successfully');
         }
-        $this->productModel->delete($id);
-        return redirect()->to('/admin/products')->with('success', 'Product deleted');
+        
+        return redirect()->to('/admin/products')->with('error', 'Product not found');
     }
 }

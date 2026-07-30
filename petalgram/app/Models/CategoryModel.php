@@ -8,36 +8,17 @@ class CategoryModel extends Model
 {
     protected $table = 'categories';
     protected $primaryKey = 'id';
-    protected $useAutoIncrement = true;
-    protected $returnType = 'object';
-    protected $useSoftDeletes = false;
+    protected $allowedFields = ['name', 'description', 'icon'];
     protected $useTimestamps = true;
     protected $createdField = 'created_at';
-    protected $allowedFields = ['name', 'description'];
-
-    public function getAll()
+    protected $updatedField = 'updated_at';
+    
+    public function getProducts($categoryId)
     {
-        return $this->orderBy('name', 'ASC')->findAll();
-    }
-
-    public function getById($id)
-    {
-        return $this->find($id);
-    }
-
-    public function createCategory($data)
-    {
-        $this->insert($data);
-        return $this->insertID();
-    }
-
-    public function updateCategory($id, $data)
-    {
-        return $this->update($id, $data);
-    }
-
-    public function deleteCategory($id)
-    {
-        return $this->delete($id);
+        return $this->db->table('products')
+            ->where('category_id', $categoryId)
+            ->where('status', 'active')
+            ->get()
+            ->getResultArray();
     }
 }

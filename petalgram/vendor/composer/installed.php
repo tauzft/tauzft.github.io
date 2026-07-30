@@ -3,7 +3,7 @@
         'name' => 'petalgram/flower-shop',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'e2e9bb1e96924177ab35f41b8ecb7cc7b95bceb3',
+        'reference' => 'a4624372586bc7972026314acb2fcf6fd604d395',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -31,7 +31,7 @@
         'petalgram/flower-shop' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'e2e9bb1e96924177ab35f41b8ecb7cc7b95bceb3',
+            'reference' => 'a4624372586bc7972026314acb2fcf6fd604d395',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

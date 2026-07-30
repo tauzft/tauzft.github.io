@@ -1,9 +1,25 @@
 <?php
 
-define('FCPATH', __DIR__ . '/');
-define('SELF', 'index.php');
-define('SYSTEMPATH', FCPATH . '../vendor/codeigniter4/framework/system');
-define('APPPATH', FCPATH . '../app/');
-define('WRITEPATH', FCPATH . '../writable');
+use CodeIgniter\Boot;
+use Config\Paths;
 
-require_once SYSTEMPATH . 'CodeIgniter.php';
+$minPhpVersion = '8.2';
+if (version_compare(PHP_VERSION, $minPhpVersion, '<')) {
+    header('HTTP/1.1 503 Service Unavailable.', true, 503);
+    echo sprintf('PHP %s or higher is required. Current: %s', $minPhpVersion, PHP_VERSION);
+    exit(1);
+}
+
+define('FCPATH', __DIR__ . DIRECTORY_SEPARATOR);
+
+if (getcwd() . DIRECTORY_SEPARATOR !== FCPATH) {
+    chdir(FCPATH);
+}
+
+require FCPATH . '../app/Config/Paths.php';
+
+$paths = new Paths();
+
+require $paths->systemDirectory . '/Boot.php';
+
+exit(Boot::bootWeb($paths));

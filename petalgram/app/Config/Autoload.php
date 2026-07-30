@@ -6,14 +6,15 @@ use CodeIgniter\Config\AutoloadConfig;
 
 class Autoload extends AutoloadConfig
 {
-    public array $psr4 = [
-        APPPATH . 'Controllers' => 'App\Controllers',
-        APPPATH . 'Models'      => 'App\Models',
-        APPPATH . 'Config'      => 'App\Config',
-        APPPATH . 'Libraries'   => 'App\Libraries',
-        APPPATH . 'Helpers'     => 'App\Helpers',
-        APPPATH . 'Filters'     => 'App\Filters',
+    public $psr4 = [
+        APPPATH => APPPATH,
     ];
 
-    public array $classmap = [];
+    public $classmap = [
+        // App\Libraries\SomeLib => APPPATH . 'Libraries/SomeLib.php',
+    ];
+
+    public $files = [];
+
+    public $helpers = [];
 }

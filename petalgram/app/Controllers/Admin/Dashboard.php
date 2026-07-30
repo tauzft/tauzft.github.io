@@ -5,27 +5,21 @@ namespace App\Controllers\Admin;
 use App\Controllers\BaseController;
 use App\Models\ProductModel;
 use App\Models\OrderModel;
-use App\Models\UserModel;
+use App\Models\CategoryModel;
 
 class Dashboard extends BaseController
 {
     public function index()
     {
-        if (session()->get('user_role') !== 'admin') {
-            return redirect()->to('/login')->with('error', 'Access denied');
-        }
-
         $productModel = new ProductModel();
         $orderModel = new OrderModel();
-        $userModel = new UserModel();
-
-        $data = [
-            'title' => 'Admin Dashboard - Petalgram',
-            'totalProducts' => $productModel->countAllResults(),
-            'totalOrders' => $orderModel->countAllResults(),
-            'totalUsers' => $userModel->countAllResults(),
-            'content' => 'admin/dashboard'
-        ];
-        return view('layouts/main', $data);
+        $categoryModel = new CategoryModel();
+        
+        $data['total_products'] = $productModel->countAll();
+        $data['total_orders'] = $orderModel->countAll();
+        $data['total_categories'] = $categoryModel->countAll();
+        $data['recent_orders'] = $orderModel->orderBy('id', 'DESC')->limit(5)->findAll();
+        
+        return view('admin/layouts/main', ['content' => view('admin/dashboard', $data)]);
     }
 }

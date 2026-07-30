@@ -1,0 +1,438 @@
+CRITICAL - 2026-07-11 19:11:13 --> Error: Class "CodeIgniter\Config\DatabaseConfig" not found
+[Method: GET, Route: /]
+in APPPATH\Config\Database.php on line 7.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(340): include_once()
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(320): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\app\\Config\\Database.php')
+ 3 SYSTEMPATH\Autoloader\Autoloader.php(296): CodeIgniter\Autoloader\Autoloader->loadInNamespace('Config\\Database')
+ 4 SYSTEMPATH\Debug\Toolbar\Collectors\Database.php(255): CodeIgniter\Autoloader\Autoloader->loadClass('Config\\Database')
+ 5 SYSTEMPATH\Debug\Toolbar\Collectors\Database.php(75): CodeIgniter\Debug\Toolbar\Collectors\Database->getConnections()
+ 6 SYSTEMPATH\Debug\Toolbar.php(67): CodeIgniter\Debug\Toolbar\Collectors\Database->__construct()
+ 7 SYSTEMPATH\Config\Services.php(804): CodeIgniter\Debug\Toolbar->__construct(Object(Config\Toolbar))
+ 8 SYSTEMPATH\Config\BaseService.php(325): CodeIgniter\Config\Services::toolbar(Object(Config\Toolbar), false)
+ 9 SYSTEMPATH\Config\BaseService.php(264): CodeIgniter\Config\BaseService::__callStatic('toolbar', [...])
+10 SYSTEMPATH\Config\Services.php(799): CodeIgniter\Config\BaseService::getSharedInstance('toolbar', null)
+11 SYSTEMPATH\Config\BaseService.php(334): CodeIgniter\Config\Services::toolbar()
+12 SYSTEMPATH\Config\BaseService.php(203): CodeIgniter\Config\BaseService::__callStatic('toolbar', [])
+13 SYSTEMPATH\Common.php(1096): CodeIgniter\Config\BaseService::get('toolbar')
+14 APPPATH\Config\Events.php(49): service('toolbar')
+15 SYSTEMPATH\Events\Events.php(152): CodeIgniter\Events\Events::{closure:C:\Users\damnj\OneDrive\Documents\GitHub\tauzft.github.io\petalgram\app\Config\Events.php:26}()
+16 SYSTEMPATH\CodeIgniter.php(348): CodeIgniter\Events\Events::trigger('pre_system')
+17 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+18 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+19 FCPATH\index.php(25): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-07-11 19:11:32 --> Error: Class "CodeIgniter\Config\DatabaseConfig" not found
+[Method: GET, Route: /]
+in APPPATH\Config\Database.php on line 7.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(340): include_once()
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(320): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\app\\Config\\Database.php')
+ 3 SYSTEMPATH\Autoloader\Autoloader.php(296): CodeIgniter\Autoloader\Autoloader->loadInNamespace('Config\\Database')
+ 4 SYSTEMPATH\Debug\Toolbar\Collectors\Database.php(255): CodeIgniter\Autoloader\Autoloader->loadClass('Config\\Database')
+ 5 SYSTEMPATH\Debug\Toolbar\Collectors\Database.php(75): CodeIgniter\Debug\Toolbar\Collectors\Database->getConnections()
+ 6 SYSTEMPATH\Debug\Toolbar.php(67): CodeIgniter\Debug\Toolbar\Collectors\Database->__construct()
+ 7 SYSTEMPATH\Config\Services.php(804): CodeIgniter\Debug\Toolbar->__construct(Object(Config\Toolbar))
+ 8 SYSTEMPATH\Config\BaseService.php(325): CodeIgniter\Config\Services::toolbar(Object(Config\Toolbar), false)
+ 9 SYSTEMPATH\Config\BaseService.php(264): CodeIgniter\Config\BaseService::__callStatic('toolbar', [...])
+10 SYSTEMPATH\Config\Services.php(799): CodeIgniter\Config\BaseService::getSharedInstance('toolbar', null)
+11 SYSTEMPATH\Config\BaseService.php(334): CodeIgniter\Config\Services::toolbar()
+12 SYSTEMPATH\Config\BaseService.php(203): CodeIgniter\Config\BaseService::__callStatic('toolbar', [])
+13 SYSTEMPATH\Common.php(1096): CodeIgniter\Config\BaseService::get('toolbar')
+14 APPPATH\Config\Events.php(49): service('toolbar')
+15 SYSTEMPATH\Events\Events.php(152): CodeIgniter\Events\Events::{closure:C:\Users\damnj\OneDrive\Documents\GitHub\tauzft.github.io\petalgram\app\Config\Events.php:26}()
+16 SYSTEMPATH\CodeIgniter.php(348): CodeIgniter\Events\Events::trigger('pre_system')
+17 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+18 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+19 FCPATH\index.php(25): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-07-11 19:11:38 --> Error: Class "CodeIgniter\Config\DatabaseConfig" not found
+[Method: GET, Route: /]
+in APPPATH\Config\Database.php on line 7.
+ 1 SYSTEMPATH\Autoloader\Autoloader.php(340): include_once()
+ 2 SYSTEMPATH\Autoloader\Autoloader.php(320): CodeIgniter\Autoloader\Autoloader->includeFile('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\app\\Config\\Database.php')
+ 3 SYSTEMPATH\Autoloader\Autoloader.php(296): CodeIgniter\Autoloader\Autoloader->loadInNamespace('Config\\Database')
+ 4 SYSTEMPATH\Debug\Toolbar\Collectors\Database.php(255): CodeIgniter\Autoloader\Autoloader->loadClass('Config\\Database')
+ 5 SYSTEMPATH\Debug\Toolbar\Collectors\Database.php(75): CodeIgniter\Debug\Toolbar\Collectors\Database->getConnections()
+ 6 SYSTEMPATH\Debug\Toolbar.php(67): CodeIgniter\Debug\Toolbar\Collectors\Database->__construct()
+ 7 SYSTEMPATH\Config\Services.php(804): CodeIgniter\Debug\Toolbar->__construct(Object(Config\Toolbar))
+ 8 SYSTEMPATH\Config\BaseService.php(325): CodeIgniter\Config\Services::toolbar(Object(Config\Toolbar), false)
+ 9 SYSTEMPATH\Config\BaseService.php(264): CodeIgniter\Config\BaseService::__callStatic('toolbar', [...])
+10 SYSTEMPATH\Config\Services.php(799): CodeIgniter\Config\BaseService::getSharedInstance('toolbar', null)
+11 SYSTEMPATH\Config\BaseService.php(334): CodeIgniter\Config\Services::toolbar()
+12 SYSTEMPATH\Config\BaseService.php(203): CodeIgniter\Config\BaseService::__callStatic('toolbar', [])
+13 SYSTEMPATH\Common.php(1096): CodeIgniter\Config\BaseService::get('toolbar')
+14 APPPATH\Config\Events.php(49): service('toolbar')
+15 SYSTEMPATH\Events\Events.php(152): CodeIgniter\Events\Events::{closure:C:\Users\damnj\OneDrive\Documents\GitHub\tauzft.github.io\petalgram\app\Config\Events.php:26}()
+16 SYSTEMPATH\CodeIgniter.php(348): CodeIgniter\Events\Events::trigger('pre_system')
+17 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+18 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+19 FCPATH\index.php(25): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-07-11 19:12:33 --> Error: Class "App\Controllers\Controller" not found
+[Method: GET, Route: /]
+in APPPATH\Controllers\BaseController.php on line 7.
+ 1 VENDORPATH\composer\ClassLoader.php(576): include()
+ 2 VENDORPATH\composer\ClassLoader.php(427): {closure:Composer\Autoload\ClassLoader::initializeIncludeClosure():575}('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\vendor\\composer/../../app\\Controllers\\BaseController.php')
+ 3 APPPATH\Controllers\Home.php(5): Composer\Autoload\ClassLoader->loadClass('App\\Controllers\\BaseController')
+ 4 VENDORPATH\composer\ClassLoader.php(576): include('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\app\\Controllers\\Home.php')
+ 5 VENDORPATH\composer\ClassLoader.php(427): {closure:Composer\Autoload\ClassLoader::initializeIncludeClosure():575}('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\vendor\\composer/../../app\\Controllers\\Home.php')
+ 6 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Controllers\\Home')
+ 7 SYSTEMPATH\Router\Router.php(790): class_exists('\\App\\Controllers\\Home')
+ 8 SYSTEMPATH\Router\Router.php(228): CodeIgniter\Router\Router->processRouteAttributes()
+ 9 SYSTEMPATH\CodeIgniter.php(852): CodeIgniter\Router\Router->handle('/')
+10 SYSTEMPATH\CodeIgniter.php(464): CodeIgniter\CodeIgniter->tryToRouteIt(Object(CodeIgniter\Router\RouteCollection))
+11 SYSTEMPATH\CodeIgniter.php(363): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(25): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-07-11 19:12:38 --> Error: Class "App\Controllers\Controller" not found
+[Method: GET, Route: /]
+in APPPATH\Controllers\BaseController.php on line 7.
+ 1 VENDORPATH\composer\ClassLoader.php(576): include()
+ 2 VENDORPATH\composer\ClassLoader.php(427): {closure:Composer\Autoload\ClassLoader::initializeIncludeClosure():575}('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\vendor\\composer/../../app\\Controllers\\BaseController.php')
+ 3 APPPATH\Controllers\Home.php(5): Composer\Autoload\ClassLoader->loadClass('App\\Controllers\\BaseController')
+ 4 VENDORPATH\composer\ClassLoader.php(576): include('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\app\\Controllers\\Home.php')
+ 5 VENDORPATH\composer\ClassLoader.php(427): {closure:Composer\Autoload\ClassLoader::initializeIncludeClosure():575}('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\vendor\\composer/../../app\\Controllers\\Home.php')
+ 6 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Controllers\\Home')
+ 7 SYSTEMPATH\Router\Router.php(790): class_exists('\\App\\Controllers\\Home')
+ 8 SYSTEMPATH\Router\Router.php(228): CodeIgniter\Router\Router->processRouteAttributes()
+ 9 SYSTEMPATH\CodeIgniter.php(852): CodeIgniter\Router\Router->handle('/')
+10 SYSTEMPATH\CodeIgniter.php(464): CodeIgniter\CodeIgniter->tryToRouteIt(Object(CodeIgniter\Router\RouteCollection))
+11 SYSTEMPATH\CodeIgniter.php(363): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(25): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-07-11 19:12:59 --> Error: Class "App\Controllers\Controller" not found
+[Method: GET, Route: /]
+in APPPATH\Controllers\BaseController.php on line 7.
+ 1 VENDORPATH\composer\ClassLoader.php(576): include()
+ 2 VENDORPATH\composer\ClassLoader.php(427): {closure:Composer\Autoload\ClassLoader::initializeIncludeClosure():575}('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\vendor\\composer/../../app\\Controllers\\BaseController.php')
+ 3 APPPATH\Controllers\Home.php(5): Composer\Autoload\ClassLoader->loadClass('App\\Controllers\\BaseController')
+ 4 VENDORPATH\composer\ClassLoader.php(576): include('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\app\\Controllers\\Home.php')
+ 5 VENDORPATH\composer\ClassLoader.php(427): {closure:Composer\Autoload\ClassLoader::initializeIncludeClosure():575}('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\vendor\\composer/../../app\\Controllers\\Home.php')
+ 6 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Controllers\\Home')
+ 7 SYSTEMPATH\Router\Router.php(790): class_exists('\\App\\Controllers\\Home')
+ 8 SYSTEMPATH\Router\Router.php(228): CodeIgniter\Router\Router->processRouteAttributes()
+ 9 SYSTEMPATH\CodeIgniter.php(852): CodeIgniter\Router\Router->handle('/')
+10 SYSTEMPATH\CodeIgniter.php(464): CodeIgniter\CodeIgniter->tryToRouteIt(Object(CodeIgniter\Router\RouteCollection))
+11 SYSTEMPATH\CodeIgniter.php(363): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(25): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-07-11 19:13:22 --> Error: Class "CodeIgniter\Controllers\Controller" not found
+[Method: GET, Route: /]
+in APPPATH\Controllers\BaseController.php on line 7.
+ 1 VENDORPATH\composer\ClassLoader.php(576): include()
+ 2 VENDORPATH\composer\ClassLoader.php(427): {closure:Composer\Autoload\ClassLoader::initializeIncludeClosure():575}('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\vendor\\composer/../../app\\Controllers\\BaseController.php')
+ 3 APPPATH\Controllers\Home.php(5): Composer\Autoload\ClassLoader->loadClass('App\\Controllers\\BaseController')
+ 4 VENDORPATH\composer\ClassLoader.php(576): include('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\app\\Controllers\\Home.php')
+ 5 VENDORPATH\composer\ClassLoader.php(427): {closure:Composer\Autoload\ClassLoader::initializeIncludeClosure():575}('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\vendor\\composer/../../app\\Controllers\\Home.php')
+ 6 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Controllers\\Home')
+ 7 SYSTEMPATH\Router\Router.php(790): class_exists('\\App\\Controllers\\Home')
+ 8 SYSTEMPATH\Router\Router.php(228): CodeIgniter\Router\Router->processRouteAttributes()
+ 9 SYSTEMPATH\CodeIgniter.php(852): CodeIgniter\Router\Router->handle('/')
+10 SYSTEMPATH\CodeIgniter.php(464): CodeIgniter\CodeIgniter->tryToRouteIt(Object(CodeIgniter\Router\RouteCollection))
+11 SYSTEMPATH\CodeIgniter.php(363): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(25): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-07-11 19:13:28 --> Error: Class "CodeIgniter\Controllers\Controller" not found
+[Method: GET, Route: /]
+in APPPATH\Controllers\BaseController.php on line 7.
+ 1 VENDORPATH\composer\ClassLoader.php(576): include()
+ 2 VENDORPATH\composer\ClassLoader.php(427): {closure:Composer\Autoload\ClassLoader::initializeIncludeClosure():575}('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\vendor\\composer/../../app\\Controllers\\BaseController.php')
+ 3 APPPATH\Controllers\Home.php(5): Composer\Autoload\ClassLoader->loadClass('App\\Controllers\\BaseController')
+ 4 VENDORPATH\composer\ClassLoader.php(576): include('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\app\\Controllers\\Home.php')
+ 5 VENDORPATH\composer\ClassLoader.php(427): {closure:Composer\Autoload\ClassLoader::initializeIncludeClosure():575}('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\vendor\\composer/../../app\\Controllers\\Home.php')
+ 6 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Controllers\\Home')
+ 7 SYSTEMPATH\Router\Router.php(790): class_exists('\\App\\Controllers\\Home')
+ 8 SYSTEMPATH\Router\Router.php(228): CodeIgniter\Router\Router->processRouteAttributes()
+ 9 SYSTEMPATH\CodeIgniter.php(852): CodeIgniter\Router\Router->handle('/')
+10 SYSTEMPATH\CodeIgniter.php(464): CodeIgniter\CodeIgniter->tryToRouteIt(Object(CodeIgniter\Router\RouteCollection))
+11 SYSTEMPATH\CodeIgniter.php(363): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(25): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-07-11 19:13:37 --> Error: Class "CodeIgniter\Controllers\Controller" not found
+[Method: GET, Route: /]
+in APPPATH\Controllers\BaseController.php on line 7.
+ 1 VENDORPATH\composer\ClassLoader.php(576): include()
+ 2 VENDORPATH\composer\ClassLoader.php(427): {closure:Composer\Autoload\ClassLoader::initializeIncludeClosure():575}('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\vendor\\composer/../../app\\Controllers\\BaseController.php')
+ 3 APPPATH\Controllers\Home.php(5): Composer\Autoload\ClassLoader->loadClass('App\\Controllers\\BaseController')
+ 4 VENDORPATH\composer\ClassLoader.php(576): include('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\app\\Controllers\\Home.php')
+ 5 VENDORPATH\composer\ClassLoader.php(427): {closure:Composer\Autoload\ClassLoader::initializeIncludeClosure():575}('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\vendor\\composer/../../app\\Controllers\\Home.php')
+ 6 [internal function]: Composer\Autoload\ClassLoader->loadClass('App\\Controllers\\Home')
+ 7 SYSTEMPATH\Router\Router.php(790): class_exists('\\App\\Controllers\\Home')
+ 8 SYSTEMPATH\Router\Router.php(228): CodeIgniter\Router\Router->processRouteAttributes()
+ 9 SYSTEMPATH\CodeIgniter.php(852): CodeIgniter\Router\Router->handle('/')
+10 SYSTEMPATH\CodeIgniter.php(464): CodeIgniter\CodeIgniter->tryToRouteIt(Object(CodeIgniter\Router\RouteCollection))
+11 SYSTEMPATH\CodeIgniter.php(363): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(25): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-07-11 19:14:04 --> CodeIgniter\Session\Exceptions\SessionException: Session: Configured save path "C:\Users\damnj\OneDrive\Documents\GitHub\tauzft.github.io\petalgram\writable\session" is not writable by the PHP process.
+[Method: GET, Route: /]
+in SYSTEMPATH\Session\Handlers\FileHandler.php on line 102.
+ 1 SYSTEMPATH\Session\Handlers\FileHandler.php(102): CodeIgniter\Session\Exceptions\SessionException::forWriteProtectedSavePath('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\writable\\session')
+ 2 [internal function]: CodeIgniter\Session\Handlers\FileHandler->open('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\writable\\session', 'ci_session')
+ 3 SYSTEMPATH\Session\Session.php(624): session_start()
+ 4 SYSTEMPATH\Session\Session.php(119): CodeIgniter\Session\Session->startSession()
+ 5 SYSTEMPATH\Config\Services.php(714): CodeIgniter\Session\Session->start()
+ 6 SYSTEMPATH\Config\BaseService.php(325): CodeIgniter\Config\Services::session(Object(Config\Session), false)
+ 7 SYSTEMPATH\Config\BaseService.php(264): CodeIgniter\Config\BaseService::__callStatic('session', [...])
+ 8 SYSTEMPATH\Config\Services.php(668): CodeIgniter\Config\BaseService::getSharedInstance('session', null)
+ 9 SYSTEMPATH\Config\BaseService.php(334): CodeIgniter\Config\Services::session()
+10 SYSTEMPATH\Config\BaseService.php(203): CodeIgniter\Config\BaseService::__callStatic('session', [])
+11 SYSTEMPATH\Common.php(1096): CodeIgniter\Config\BaseService::get('session')
+12 SYSTEMPATH\Common.php(1069): service('session')
+13 APPPATH\Controllers\BaseController.php(13): session()
+14 SYSTEMPATH\CodeIgniter.php(944): App\Controllers\BaseController->__construct()
+15 SYSTEMPATH\CodeIgniter.php(511): CodeIgniter\CodeIgniter->createController()
+16 SYSTEMPATH\CodeIgniter.php(363): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+17 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+18 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+19 FCPATH\index.php(25): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-07-11 19:14:09 --> CodeIgniter\Session\Exceptions\SessionException: Session: Configured save path "C:\Users\damnj\OneDrive\Documents\GitHub\tauzft.github.io\petalgram\writable\session" is not writable by the PHP process.
+[Method: GET, Route: /]
+in SYSTEMPATH\Session\Handlers\FileHandler.php on line 102.
+ 1 SYSTEMPATH\Session\Handlers\FileHandler.php(102): CodeIgniter\Session\Exceptions\SessionException::forWriteProtectedSavePath('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\writable\\session')
+ 2 [internal function]: CodeIgniter\Session\Handlers\FileHandler->open('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\writable\\session', 'ci_session')
+ 3 SYSTEMPATH\Session\Session.php(624): session_start()
+ 4 SYSTEMPATH\Session\Session.php(119): CodeIgniter\Session\Session->startSession()
+ 5 SYSTEMPATH\Config\Services.php(714): CodeIgniter\Session\Session->start()
+ 6 SYSTEMPATH\Config\BaseService.php(325): CodeIgniter\Config\Services::session(Object(Config\Session), false)
+ 7 SYSTEMPATH\Config\BaseService.php(264): CodeIgniter\Config\BaseService::__callStatic('session', [...])
+ 8 SYSTEMPATH\Config\Services.php(668): CodeIgniter\Config\BaseService::getSharedInstance('session', null)
+ 9 SYSTEMPATH\Config\BaseService.php(334): CodeIgniter\Config\Services::session()
+10 SYSTEMPATH\Config\BaseService.php(203): CodeIgniter\Config\BaseService::__callStatic('session', [])
+11 SYSTEMPATH\Common.php(1096): CodeIgniter\Config\BaseService::get('session')
+12 SYSTEMPATH\Common.php(1069): service('session')
+13 APPPATH\Controllers\BaseController.php(13): session()
+14 SYSTEMPATH\CodeIgniter.php(944): App\Controllers\BaseController->__construct()
+15 SYSTEMPATH\CodeIgniter.php(511): CodeIgniter\CodeIgniter->createController()
+16 SYSTEMPATH\CodeIgniter.php(363): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+17 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+18 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+19 FCPATH\index.php(25): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-07-11 19:14:33 --> ErrorException: Uncaught CodeIgniter\Exceptions\PageNotFoundException: Can't find a route for 'CLI: /'. in C:\Users\damnj\OneDrive\Documents\GitHub\tauzft.github.io\petalgram\vendor\codeigniter4\framework\system\CodeIgniter.php:1024
+Stack trace:
+#0 C:\Users\damnj\OneDrive\Documents\GitHub\tauzft.github.io\petalgram\vendor\codeigniter4\framework\system\CodeIgniter.php(1024): CodeIgniter\Exceptions\PageNotFoundException::forPageNotFound('Can't find a ro...')
+#1 C:\Users\damnj\OneDrive\Documents\GitHub\tauzft.github.io\petalgram\vendor\codeigniter4\framework\system\CodeIgniter.php(369): CodeIgniter\CodeIgniter->display404errors(Object(CodeIgniter\Exceptions\PageNotFoundException))
+#2 C:\Users\damnj\OneDrive\Documents\GitHub\tauzft.github.io\petalgram\vendor\codeigniter4\framework\system\Boot.php(417): CodeIgniter\CodeIgniter->run()
+#3 C:\Users\damnj\OneDrive\Documents\GitHub\tauzft.github.io\petalgram\vendor\codeigniter4\framework\system\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#4 Command line code(1): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#5 {main}
+  thrown
+[Method: CLI, Route: /]
+in SYSTEMPATH\CodeIgniter.php on line 1024.
+ 1 [internal function]: CodeIgniter\Debug\Exceptions->shutdownHandler()
+CRITICAL - 2026-07-11 19:14:41 --> CodeIgniter\Session\Exceptions\SessionException: Session: Configured save path "C:\Users\damnj\OneDrive\Documents\GitHub\tauzft.github.io\petalgram\writable\session" is not writable by the PHP process.
+[Method: GET, Route: /]
+in SYSTEMPATH\Session\Handlers\FileHandler.php on line 102.
+ 1 SYSTEMPATH\Session\Handlers\FileHandler.php(102): CodeIgniter\Session\Exceptions\SessionException::forWriteProtectedSavePath('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\writable\\session')
+ 2 [internal function]: CodeIgniter\Session\Handlers\FileHandler->open('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\writable\\session', 'ci_session')
+ 3 SYSTEMPATH\Session\Session.php(624): session_start()
+ 4 SYSTEMPATH\Session\Session.php(119): CodeIgniter\Session\Session->startSession()
+ 5 SYSTEMPATH\Config\Services.php(714): CodeIgniter\Session\Session->start()
+ 6 SYSTEMPATH\Config\BaseService.php(325): CodeIgniter\Config\Services::session(Object(Config\Session), false)
+ 7 SYSTEMPATH\Config\BaseService.php(264): CodeIgniter\Config\BaseService::__callStatic('session', [...])
+ 8 SYSTEMPATH\Config\Services.php(668): CodeIgniter\Config\BaseService::getSharedInstance('session', null)
+ 9 SYSTEMPATH\Config\BaseService.php(334): CodeIgniter\Config\Services::session()
+10 SYSTEMPATH\Config\BaseService.php(203): CodeIgniter\Config\BaseService::__callStatic('session', [])
+11 SYSTEMPATH\Common.php(1096): CodeIgniter\Config\BaseService::get('session')
+12 SYSTEMPATH\Common.php(1069): service('session')
+13 APPPATH\Controllers\BaseController.php(13): session()
+14 SYSTEMPATH\CodeIgniter.php(944): App\Controllers\BaseController->__construct()
+15 SYSTEMPATH\CodeIgniter.php(511): CodeIgniter\CodeIgniter->createController()
+16 SYSTEMPATH\CodeIgniter.php(363): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+17 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+18 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+19 FCPATH\index.php(25): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-07-11 19:15:08 --> CodeIgniter\Session\Exceptions\SessionException: Session: Configured save path "C:\Users\damnj\OneDrive\Documents\GitHub\tauzft.github.io\petalgram\writable\session" is not writable by the PHP process.
+[Method: GET, Route: /]
+in SYSTEMPATH\Session\Handlers\FileHandler.php on line 102.
+ 1 SYSTEMPATH\Session\Handlers\FileHandler.php(102): CodeIgniter\Session\Exceptions\SessionException::forWriteProtectedSavePath('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\writable\\session')
+ 2 [internal function]: CodeIgniter\Session\Handlers\FileHandler->open('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\writable\\session', 'ci_session')
+ 3 SYSTEMPATH\Session\Session.php(624): session_start()
+ 4 SYSTEMPATH\Session\Session.php(119): CodeIgniter\Session\Session->startSession()
+ 5 SYSTEMPATH\Config\Services.php(714): CodeIgniter\Session\Session->start()
+ 6 SYSTEMPATH\Config\BaseService.php(325): CodeIgniter\Config\Services::session(Object(Config\Session), false)
+ 7 SYSTEMPATH\Config\BaseService.php(264): CodeIgniter\Config\BaseService::__callStatic('session', [...])
+ 8 SYSTEMPATH\Config\Services.php(668): CodeIgniter\Config\BaseService::getSharedInstance('session', null)
+ 9 SYSTEMPATH\Config\BaseService.php(334): CodeIgniter\Config\Services::session()
+10 SYSTEMPATH\Config\BaseService.php(203): CodeIgniter\Config\BaseService::__callStatic('session', [])
+11 SYSTEMPATH\Common.php(1096): CodeIgniter\Config\BaseService::get('session')
+12 SYSTEMPATH\Common.php(1069): service('session')
+13 APPPATH\Controllers\BaseController.php(13): session()
+14 SYSTEMPATH\CodeIgniter.php(944): App\Controllers\BaseController->__construct()
+15 SYSTEMPATH\CodeIgniter.php(511): CodeIgniter\CodeIgniter->createController()
+16 SYSTEMPATH\CodeIgniter.php(363): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+17 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+18 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+19 FCPATH\index.php(25): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-07-11 19:15:32 --> CodeIgniter\Session\Exceptions\SessionException: Session: Configured save path "C:\Users\damnj\OneDrive\Documents\GitHub\tauzft.github.io\petalgram\writable\session" is not writable by the PHP process.
+[Method: GET, Route: /]
+in SYSTEMPATH\Session\Handlers\FileHandler.php on line 102.
+ 1 SYSTEMPATH\Session\Handlers\FileHandler.php(102): CodeIgniter\Session\Exceptions\SessionException::forWriteProtectedSavePath('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\writable\\session')
+ 2 [internal function]: CodeIgniter\Session\Handlers\FileHandler->open('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\writable\\session', 'ci_session')
+ 3 SYSTEMPATH\Session\Session.php(624): session_start()
+ 4 SYSTEMPATH\Session\Session.php(119): CodeIgniter\Session\Session->startSession()
+ 5 SYSTEMPATH\Config\Services.php(714): CodeIgniter\Session\Session->start()
+ 6 SYSTEMPATH\Config\BaseService.php(325): CodeIgniter\Config\Services::session(Object(Config\Session), false)
+ 7 SYSTEMPATH\Config\BaseService.php(264): CodeIgniter\Config\BaseService::__callStatic('session', [...])
+ 8 SYSTEMPATH\Config\Services.php(668): CodeIgniter\Config\BaseService::getSharedInstance('session', null)
+ 9 SYSTEMPATH\Config\BaseService.php(334): CodeIgniter\Config\Services::session()
+10 SYSTEMPATH\Config\BaseService.php(203): CodeIgniter\Config\BaseService::__callStatic('session', [])
+11 SYSTEMPATH\Common.php(1096): CodeIgniter\Config\BaseService::get('session')
+12 SYSTEMPATH\Common.php(1069): service('session')
+13 APPPATH\Controllers\BaseController.php(13): session()
+14 SYSTEMPATH\CodeIgniter.php(944): App\Controllers\BaseController->__construct()
+15 SYSTEMPATH\CodeIgniter.php(511): CodeIgniter\CodeIgniter->createController()
+16 SYSTEMPATH\CodeIgniter.php(363): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+17 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+18 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+19 FCPATH\index.php(25): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-07-11 19:15:43 --> CodeIgniter\Session\Exceptions\SessionException: Session: Configured save path "C:\Users\damnj\OneDrive\Documents\GitHub\tauzft.github.io\petalgram\writable\session" is not writable by the PHP process.
+[Method: GET, Route: /]
+in SYSTEMPATH\Session\Handlers\FileHandler.php on line 102.
+ 1 SYSTEMPATH\Session\Handlers\FileHandler.php(102): CodeIgniter\Session\Exceptions\SessionException::forWriteProtectedSavePath('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\writable\\session')
+ 2 [internal function]: CodeIgniter\Session\Handlers\FileHandler->open('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\writable\\session', 'ci_session')
+ 3 SYSTEMPATH\Session\Session.php(624): session_start()
+ 4 SYSTEMPATH\Session\Session.php(119): CodeIgniter\Session\Session->startSession()
+ 5 SYSTEMPATH\Config\Services.php(714): CodeIgniter\Session\Session->start()
+ 6 SYSTEMPATH\Config\BaseService.php(325): CodeIgniter\Config\Services::session(Object(Config\Session), false)
+ 7 SYSTEMPATH\Config\BaseService.php(264): CodeIgniter\Config\BaseService::__callStatic('session', [...])
+ 8 SYSTEMPATH\Config\Services.php(668): CodeIgniter\Config\BaseService::getSharedInstance('session', null)
+ 9 SYSTEMPATH\Config\BaseService.php(334): CodeIgniter\Config\Services::session()
+10 SYSTEMPATH\Config\BaseService.php(203): CodeIgniter\Config\BaseService::__callStatic('session', [])
+11 SYSTEMPATH\Common.php(1096): CodeIgniter\Config\BaseService::get('session')
+12 SYSTEMPATH\Common.php(1069): service('session')
+13 APPPATH\Controllers\BaseController.php(13): session()
+14 SYSTEMPATH\CodeIgniter.php(944): App\Controllers\BaseController->__construct()
+15 SYSTEMPATH\CodeIgniter.php(511): CodeIgniter\CodeIgniter->createController()
+16 SYSTEMPATH\CodeIgniter.php(363): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+17 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+18 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+19 FCPATH\index.php(25): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-07-11 19:16:05 --> CodeIgniter\Session\Exceptions\SessionException: Session: Configured save path "C:\Users\damnj\OneDrive\Documents\GitHub\tauzft.github.io\petalgram\writable\session" is not writable by the PHP process.
+[Method: GET, Route: /]
+in SYSTEMPATH\Session\Handlers\FileHandler.php on line 102.
+ 1 SYSTEMPATH\Session\Handlers\FileHandler.php(102): CodeIgniter\Session\Exceptions\SessionException::forWriteProtectedSavePath('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\writable\\session')
+ 2 [internal function]: CodeIgniter\Session\Handlers\FileHandler->open('C:\\Users\\damnj\\OneDrive\\Documents\\GitHub\\tauzft.github.io\\petalgram\\writable\\session', 'ci_session')
+ 3 SYSTEMPATH\Session\Session.php(624): session_start()
+ 4 SYSTEMPATH\Session\Session.php(119): CodeIgniter\Session\Session->startSession()
+ 5 SYSTEMPATH\Config\Services.php(714): CodeIgniter\Session\Session->start()
+ 6 SYSTEMPATH\Config\BaseService.php(325): CodeIgniter\Config\Services::session(Object(Config\Session), false)
+ 7 SYSTEMPATH\Config\BaseService.php(264): CodeIgniter\Config\BaseService::__callStatic('session', [...])
+ 8 SYSTEMPATH\Config\Services.php(668): CodeIgniter\Config\BaseService::getSharedInstance('session', null)
+ 9 SYSTEMPATH\Config\BaseService.php(334): CodeIgniter\Config\Services::session()
+10 SYSTEMPATH\Config\BaseService.php(203): CodeIgniter\Config\BaseService::__callStatic('session', [])
+11 SYSTEMPATH\Common.php(1096): CodeIgniter\Config\BaseService::get('session')
+12 SYSTEMPATH\Common.php(1069): service('session')
+13 APPPATH\Controllers\BaseController.php(13): session()
+14 SYSTEMPATH\CodeIgniter.php(944): App\Controllers\BaseController->__construct()
+15 SYSTEMPATH\CodeIgniter.php(511): CodeIgniter\CodeIgniter->createController()
+16 SYSTEMPATH\CodeIgniter.php(363): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+17 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+18 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+19 FCPATH\index.php(25): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-07-11 19:16:51 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-11 19:29:32 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-11 19:35:16 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-11 20:35:06 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+ERROR - 2026-07-11 20:35:06 --> Unknown column 'categories.icon' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('SELECT `products`.*, `categories`.`name` as `category_name`, `categories`.`icon` as `category_icon`
+FROM `products`
+LEFT JOIN `categories` ON `categories`.`id` = `products`.`category_id`
+ORDER BY `products`.`id` DESC', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(908): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `products`.*, `categories`.`name` as `category_name`, `categories`.`icon` as `category_icon`
+FROM `products`
+LEFT JOIN `categories` ON `categories`.`id` = `products`.`category_id`
+ORDER BY `products`.`id` DESC')
+ 3 SYSTEMPATH\Database\BaseConnection.php(825): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `products`.*, `categories`.`name` as `category_name`, `categories`.`icon` as `category_icon`
+FROM `products`
+LEFT JOIN `categories` ON `categories`.`id` = `products`.`category_id`
+ORDER BY `products`.`id` DESC')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1659): CodeIgniter\Database\BaseConnection->query('SELECT `products`.*, `categories`.`name` as `category_name`, `categories`.`icon` as `category_icon`
+FROM `products`
+LEFT JOIN `categories` ON `categories`.`id` = `products`.`category_id`
+ORDER BY `products`.`id` DESC', [], false)
+ 5 SYSTEMPATH\Model.php(255): CodeIgniter\Database\BaseBuilder->get()
+ 6 SYSTEMPATH\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+ 7 APPPATH\Models\ProductModel.php(21): CodeIgniter\BaseModel->findAll()
+ 8 APPPATH\Controllers\Home.php(15): App\Models\ProductModel->getProductsWithCategory()
+ 9 SYSTEMPATH\CodeIgniter.php(974): App\Controllers\Home->index()
+10 SYSTEMPATH\CodeIgniter.php(520): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+11 SYSTEMPATH\CodeIgniter.php(363): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(25): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-07-11 20:35:06 --> CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'categories.icon' in 'field list'
+[Method: GET, Route: /]
+in SYSTEMPATH\Database\BaseConnection.php on line 863.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(1659): CodeIgniter\Database\BaseConnection->query('SELECT `products`.*, `categories`.`name` as `category_name`, `categories`.`icon` as `category_icon`
+FROM `products`
+LEFT JOIN `categories` ON `categories`.`id` = `products`.`category_id`
+ORDER BY `products`.`id` DESC', [], false)
+ 2 SYSTEMPATH\Model.php(255): CodeIgniter\Database\BaseBuilder->get()
+ 3 SYSTEMPATH\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+ 4 APPPATH\Models\ProductModel.php(21): CodeIgniter\BaseModel->findAll()
+ 5 APPPATH\Controllers\Home.php(15): App\Models\ProductModel->getProductsWithCategory()
+ 6 SYSTEMPATH\CodeIgniter.php(974): App\Controllers\Home->index()
+ 7 SYSTEMPATH\CodeIgniter.php(520): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+ 8 SYSTEMPATH\CodeIgniter.php(363): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(25): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-07-11 20:35:06 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Unknown column 'categories.icon' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 310.
+ 1 SYSTEMPATH\Database\BaseConnection.php(908): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `products`.*, `categories`.`name` as `category_name`, `categories`.`icon` as `category_icon`
+FROM `products`
+LEFT JOIN `categories` ON `categories`.`id` = `products`.`category_id`
+ORDER BY `products`.`id` DESC')
+ 2 SYSTEMPATH\Database\BaseConnection.php(825): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `products`.*, `categories`.`name` as `category_name`, `categories`.`icon` as `category_icon`
+FROM `products`
+LEFT JOIN `categories` ON `categories`.`id` = `products`.`category_id`
+ORDER BY `products`.`id` DESC')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(1659): CodeIgniter\Database\BaseConnection->query('SELECT `products`.*, `categories`.`name` as `category_name`, `categories`.`icon` as `category_icon`
+FROM `products`
+LEFT JOIN `categories` ON `categories`.`id` = `products`.`category_id`
+ORDER BY `products`.`id` DESC', [], false)
+ 4 SYSTEMPATH\Model.php(255): CodeIgniter\Database\BaseBuilder->get()
+ 5 SYSTEMPATH\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+ 6 APPPATH\Models\ProductModel.php(21): CodeIgniter\BaseModel->findAll()
+ 7 APPPATH\Controllers\Home.php(15): App\Models\ProductModel->getProductsWithCategory()
+ 8 SYSTEMPATH\CodeIgniter.php(974): App\Controllers\Home->index()
+ 9 SYSTEMPATH\CodeIgniter.php(520): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+10 SYSTEMPATH\CodeIgniter.php(363): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+11 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+12 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+13 FCPATH\index.php(25): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2026-07-11 20:35:06 --> [Caused by] mysqli_sql_exception: Unknown column 'categories.icon' in 'field list'
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 300.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(300): mysqli->query('SELECT `products`.*, `categories`.`name` as `category_name`, `categories`.`icon` as `category_icon`
+FROM `products`
+LEFT JOIN `categories` ON `categories`.`id` = `products`.`category_id`
+ORDER BY `products`.`id` DESC', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(908): CodeIgniter\Database\MySQLi\Connection->execute('SELECT `products`.*, `categories`.`name` as `category_name`, `categories`.`icon` as `category_icon`
+FROM `products`
+LEFT JOIN `categories` ON `categories`.`id` = `products`.`category_id`
+ORDER BY `products`.`id` DESC')
+ 3 SYSTEMPATH\Database\BaseConnection.php(825): CodeIgniter\Database\BaseConnection->simpleQuery('SELECT `products`.*, `categories`.`name` as `category_name`, `categories`.`icon` as `category_icon`
+FROM `products`
+LEFT JOIN `categories` ON `categories`.`id` = `products`.`category_id`
+ORDER BY `products`.`id` DESC')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(1659): CodeIgniter\Database\BaseConnection->query('SELECT `products`.*, `categories`.`name` as `category_name`, `categories`.`icon` as `category_icon`
+FROM `products`
+LEFT JOIN `categories` ON `categories`.`id` = `products`.`category_id`
+ORDER BY `products`.`id` DESC', [], false)
+ 5 SYSTEMPATH\Model.php(255): CodeIgniter\Database\BaseBuilder->get()
+ 6 SYSTEMPATH\BaseModel.php(676): CodeIgniter\Model->doFindAll(0, 0)
+ 7 APPPATH\Models\ProductModel.php(21): CodeIgniter\BaseModel->findAll()
+ 8 APPPATH\Controllers\Home.php(15): App\Models\ProductModel->getProductsWithCategory()
+ 9 SYSTEMPATH\CodeIgniter.php(974): App\Controllers\Home->index()
+10 SYSTEMPATH\CodeIgniter.php(520): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\Home))
+11 SYSTEMPATH\CodeIgniter.php(363): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+12 SYSTEMPATH\Boot.php(417): CodeIgniter\CodeIgniter->run()
+13 SYSTEMPATH\Boot.php(68): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+14 FCPATH\index.php(25): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+DEBUG - 2026-07-11 20:36:48 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-11 20:36:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+DEBUG - 2026-07-11 20:39:10 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.

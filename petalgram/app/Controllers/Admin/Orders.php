@@ -8,54 +8,43 @@ use App\Models\OrderItemModel;
 
 class Orders extends BaseController
 {
-    protected $orderModel;
-    protected $orderItemModel;
-
-    public function __construct()
-    {
-        $this->orderModel = new OrderModel();
-        $this->orderItemModel = new OrderItemModel();
-    }
-
     public function index()
     {
-        if (session()->get('user_role') !== 'admin') {
-            return redirect()->to('/login');
-        }
-
-        $data = [
-            'title' => 'Manage Orders - Petalgram',
-            'orders' => $this->orderModel->getAll(),
-            'content' => 'admin/orders'
-        ];
-        return view('layouts/main', $data);
+        $orderModel = new OrderModel();
+        $data['orders'] = $orderModel->getOrdersWithItems();
+        return view('admin/layouts/main', ['content' => view('admin/orders/index', $data)]);
     }
-
+    
     public function view($id)
     {
-        if (session()->get('user_role') !== 'admin') {
-            return redirect()->to('/login');
+        $orderModel = new OrderModel();
+        $orderItemModel = new OrderItemModel();
+        
+        $data['order'] = $orderModel->find($id);
+        $data['items'] = $orderItemModel->where('order_id', $id)->findAll();
+        
+        if (!$data['order']) {
+            return redirect()->to('/admin/orders')->with('error', 'Order not found');
         }
-
-        $order = $this->orderModel->getById($id);
-        $items = $this->orderItemModel->getByOrderId($id);
-
-        $data = [
-            'title' => 'Order #' . $id . ' - Petalgram',
-            'order' => $order,
-            'items' => $items,
-            'content' => 'admin/orders'
-        ];
-        return view('layouts/main', $data);
+        
+        return view('admin/layouts/main', ['content' => view('admin/orders/view', $data)]);
     }
-
+    
     public function update($id)
     {
-        if (session()->get('user_role') !== 'admin') {
-            return redirect()->to('/login');
-        }
+        $orderModel = new OrderModel();
         $status = $this->request->getPost('status');
-        $this->orderModel->updateStatus($id, $status);
-        return redirect()->to('/admin/orders')->with('success', 'Order status updated');
+        $payment_status = $this->request->getPost('payment_status');
+        
+        $updateData = [];
+        if ($status) $updateData['status'] = $status;
+        if ($payment_status) $updateData['payment_status'] = $payment_status;
+        
+        if (!empty($updateData)) {
+            $orderModel->update($id, $updateData);
+            return redirect()->back()->with('success', 'Order updated successfully');
+        }
+        
+        return redirect()->back()->with('error', 'No changes made');
     }
 }
