@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sylvan's Letters</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;900&family=DM+Sans:wght@300;400;500;700&family=Homemade+Apple&family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:        #b8860b;
+      --gold-light:  #fef3c7;
+      --gold-mid:    #daa520;
+      --ink:         #2c1810;
+      --ink-light:   #f5efe6;
+      --ink-mid:     #8b7355;
+      --rose:        #9b2c2c;
+      --rose-light:  #fdf2f2;
+      --paper:       rgba(255,252,245,0.92);
+      --paper-alt:   rgba(250,242,230,0.7);
+      --border:      rgba(210,190,160,0.5);
+      --text:        #2c1810;
+      --text-sub:    #8b7355;
+      --radius-lg:   28px;
+      --radius-md:   18px;
+      --radius-sm:   14px;
+      --shadow-card: 0 18px 46px rgba(60,40,20,0.10);
+      --shadow-pop:  0 26px 64px rgba(60,40,20,0.15);
+      --font-display: 'Poppins', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
+      --font-handwriting: 'Homemade Apple', cursive;
+      --font-caveat: 'Caveat', cursive;
+    }
+
+    html { font-size: 16px; }
+
+    body {
+      font-family: var(--font-body);
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 0%, #f5efe6 0%, transparent 55%),
+        radial-gradient(ellipse 60% 50% at 80% 5%, #faf0e0 0%, transparent 55%),
+        radial-gradient(circle at 50% 100%, #f5e6d0 0%, #faf3ea 60%, #fff 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      color: var(--text);
+    }
+
+    /* Floating decorations */
+    .floating-decor span {
+      position: fixed;
+      font-size: 28px;
+      opacity: 0.5;
+      pointer-events: none;
+      animation: floaty 8s ease-in-out infinite;
+    }
+    .floating-decor .d1 { top: 6%; left: 4%; }
+    .floating-decor .d2 { top: 14%; right: 8%; animation-delay: 1.2s; }
+    .floating-decor .d3 { bottom: 16%; left: 10%; animation-delay: 2.4s; }
+    .floating-decor .d4 { bottom: 8%; right: 12%; animation-delay: 3.6s; }
+    .floating-decor .d5 { top: 70%; left: 18%; animation-delay: 1.8s; }
+    .floating-decor .d6 { top: 7%; right: 20%; animation-delay: 2.8s; }
+
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50%      { transform: translateY(-14px) rotate(3deg); }
+    }
+
+    .page-wrap {
+      width: 100%;
+      max-width: 1080px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .finder-window {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-pop);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Titlebar */
+    .titlebar {
+      background: linear-gradient(180deg, rgba(250,242,230,0.9), rgba(255,252,245,0.7));
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 14px;
+      border-bottom: 1px solid var(--border);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .traffic-lights {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+    .tl {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      cursor: default;
+    }
+    .tl-red    { background: #ff5f57; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.08); }
+    .tl-yellow { background: #febc2e; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.08); }
+    .tl-green  { background: #28c840; box-shadow: 0 0 0 0.5px rgba(0,0,0,0.08); }
+
+    .titlebar-navbtns {
+      display: flex; gap: 2px; flex-shrink: 0;
+    }
+    .nav-btn {
+      background: none; border: none;
+      color: var(--text-sub); font-size: 20px;
+      cursor: pointer; padding: 2px 6px;
+      border-radius: 6px; line-height: 1;
+      font-family: inherit;
+      transition: color 0.1s, background 0.1s;
+    }
+    .nav-btn:hover:not(:disabled) {
+      background: var(--gold-light); color: var(--ink);
+    }
+    .nav-btn:disabled { opacity: 0.25; cursor: default; }
+
+    .titlebar-center {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .titlebar-center-icon { font-size: 16px; }
+    .titlebar-center span:last-child {
+      font-family: var(--font-handwriting);
+      font-size: 20px;
+      color: var(--ink);
+    }
+
+    .titlebar-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .search-pill { position: relative; display: flex; align-items: center; }
+    .search-pill-icon {
+      position: absolute; left: 10px;
+      color: var(--text-sub); font-size: 12px;
+      pointer-events: none;
+    }
+    .search-pill input {
+      background: rgba(255,252,245,0.7);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      height: 30px;
+      padding: 0 10px 0 28px;
+      font-size: 13px;
+      color: var(--text);
+      font-family: var(--font-body);
+      outline: none;
+      width: 180px;
+      transition: border-color 0.18s, background 0.18s;
+    }
+    .search-pill input::placeholder { color: var(--text-sub); opacity: 0.6; }
+    .search-pill input:focus {
+      border-color: var(--gold-mid);
+      background: rgba(255,252,245,0.9);
+    }
+
+    /* Window body */
+    .window-body {
+      display: flex;
+      min-height: 560px;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 200px;
+      flex-shrink: 0;
+      background: var(--paper-alt);
+      border-right: 1px solid var(--border);
+      padding: 12px 0;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .sb-section {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-sub);
+      padding: 12px 14px 4px;
+      opacity: 0.6;
+    }
+    .sb-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 14px;
+      margin: 0 4px;
+      border-radius: 8px;
+      font-size: 13px;
+      color: var(--text);
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.12s;
+    }
+    .sb-item:hover { background: rgba(255,255,255,0.5); }
+    .sb-item.active {
+      background: var(--gold-light);
+      color: var(--ink);
+      font-weight: 600;
+    }
+    .sb-icon { font-size: 14px; width: 16px; text-align: center; flex-shrink: 0; }
+    .sb-divider {
+      height: 1px;
+      background: var(--border);
+      margin: 8px 10px;
+    }
+    .sb-tags { padding: 4px 14px 10px; margin-top: auto; }
+    .sb-tag {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: var(--text-sub);
+      padding: 5px 0; cursor: pointer;
+      transition: color 0.12s;
+    }
+    .sb-tag:hover { color: var(--text); }
+    .sb-tag-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+    /* Main wrap */
+    .main-wrap { flex: 1; display: flex; overflow: hidden; min-width: 0; }
+    .main {
+      flex: 1; display: flex; flex-direction: column;
+      background: var(--paper); overflow: hidden; min-width: 0;
+    }
+
+    /* Path bar */
+    .path-bar {
+      display: flex; align-items: center; gap: 4px;
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,252,245,0.4);
+      flex-shrink: 0; flex-wrap: wrap;
+    }
+    .path-crumb {
+      font-size: 12px; color: var(--text-sub);
+      padding: 2px 6px; border-radius: 4px;
+      cursor: pointer; transition: background 0.1s, color 0.1s;
+    }
+    .path-crumb:hover { background: rgba(255,255,255,0.5); color: var(--text); }
+    .path-crumb.cur { color: var(--text); font-weight: 500; }
+    .path-sep { color: var(--border); font-size: 12px; }
+
+    /* View toolbar */
+    .view-toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0; gap: 10px;
+    }
+    .vt-count { font-size: 12px; color: var(--text-sub); }
+    .vt-btns { display: flex; gap: 2px; }
+    .vt-btn {
+      background: none; border: none; cursor: pointer;
+      padding: 4px 8px; border-radius: 6px;
+      font-size: 15px; color: var(--text-sub);
+      transition: background 0.12s, color 0.12s;
+    }
+    .vt-btn:hover, .vt-btn.on {
+      background: var(--gold-light); color: var(--gold);
+    }
+
+    /* List header */
+    .list-header {
+      display: grid; grid-template-columns: 1.8fr 0.8fr 1fr 70px;
+      padding: 6px 16px;
+      border-bottom: 1px solid var(--border);
+      font-size: 11px; color: var(--text-sub);
+      background: rgba(255,252,245,0.3);
+      flex-shrink: 0; gap: 10px;
+    }
+    .lh-col { cursor: pointer; user-select: none; }
+    .lh-col:hover { color: var(--text); }
+    .lh-col.asc::after { content: ' ↑'; color: var(--gold); }
+
+    /* Items area */
+    .items-area {
+      flex: 1; padding: 16px;
+      overflow-y: auto; min-width: 0;
+    }
+
+    /* Folder grid - envelope style */
+    .folder-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 12px;
+    }
+
+    .fi {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 22px 10px 16px;
+      border-radius: 14px;
+      cursor: pointer;
+      text-align: center;
+      user-select: none;
+      transition: background 0.15s, transform 0.2s, box-shadow 0.2s;
+      min-width: 0;
+      background: rgba(255,252,245,0.5);
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .fi::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 18px;
+      background: linear-gradient(135deg, rgba(255,252,245,0.3), rgba(255,252,245,0.7));
+      border-radius: 14px 14px 0 0;
+      border-bottom: 1px dashed var(--border);
+    }
+    .fi:hover {
+      background: rgba(255,252,245,0.85);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(60,40,20,0.08);
+    }
+    .fi.sel {
+      background: var(--gold-light);
+      border-color: var(--gold-mid);
+    }
+
+    .fi-icon-wrap {
+      position: relative;
+      width: 64px; height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .fi-folder-svg {
+      position: absolute; inset: 0;
+      width: 64px; height: 64px;
+      opacity: 0;
+    }
+
+    /* Wax seal monogram */
+    .fi-seal {
+      width: 60px; height: 60px;
+      border-radius: 50%;
+      background: radial-gradient(ellipse at 30% 30%, #b8860b, #8b6914);
+      box-shadow: 0 4px 12px rgba(139,105,20,0.3), inset 0 -2px 6px rgba(0,0,0,0.15), inset 0 2px 6px rgba(255,255,255,0.12);
+      border: 2.5px solid #a07818;
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+      animation: sealGlow 4s ease-in-out infinite;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .fi:hover .fi-seal {
+      transform: scale(1.06);
+      box-shadow: 0 6px 18px rgba(139,105,20,0.4), inset 0 -2px 6px rgba(0,0,0,0.15), inset 0 2px 6px rgba(255,255,255,0.12);
+    }
+    .fi-seal::after {
+      content: '';
+      position: absolute;
+      top: -3px; right: -3px;
+      width: 10px; height: 10px;
+      background: radial-gradient(circle, #d4a574, #b8834a);
+      border-radius: 50%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+
+    @keyframes sealGlow {
+      0%, 100% { box-shadow: 0 4px 12px rgba(139,105,20,0.3), inset 0 -2px 6px rgba(0,0,0,0.15), inset 0 2px 6px rgba(255,255,255,0.12); }
+      50% { box-shadow: 0 4px 18px rgba(139,105,20,0.4), inset 0 -2px 6px rgba(0,0,0,0.15), inset 0 2px 6px rgba(255,255,255,0.12); }
+    }
+
+    .fi-initial {
+      font-family: var(--font-caveat);
+      font-size: 28px;
+      font-weight: 700;
+      color: #fceacc;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.25);
+      transform: rotate(-5deg);
+      line-height: 1;
+    }
+
+    .fi-name {
+      font-family: var(--font-handwriting);
+      font-size: 18px;
+      color: var(--ink);
+      line-height: 1.3;
+      max-width: 100px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .fi-kind {
+      font-size: 10px;
+      color: var(--text-sub);
+      font-style: italic;
+      letter-spacing: 0.04em;
+    }
+
+    /* List view */
+    .list-view { display: none; }
+    .list-view.on { display: block; }
+
+    .li {
+      display: grid;
+      grid-template-columns: 22px 1.8fr 0.8fr 1fr 70px;
+      align-items: center;
+      padding: 8px 16px;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text);
+      cursor: pointer;
+      border-radius: 6px;
+      margin: 2px 0;
+      transition: background 0.1s;
+    }
+    .li:hover { background: rgba(255,252,245,0.5); }
+    .li.sel { background: var(--gold-light); }
+    .li-icon { font-size: 14px; text-align: center; }
+    .li-name { font-weight: 400; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .li-kind, .li-date, .li-size {
+      font-size: 12px; color: var(--text-sub); min-width: 0;
+    }
+    .li.sel .li-kind, .li.sel .li-date, .li.sel .li-size { color: var(--gold-mid); }
+
+    /* Empty state */
+    .empty-state {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 60px 20px;
+      gap: 10px;
+      color: var(--text-sub);
+      text-align: center;
+    }
+    .empty-state.show { display: flex; }
+    .empty-state span { font-size: 36px; }
+    .empty-state p { font-size: 13px; font-style: italic; }
+
+    /* Folder view — paper note style */
+    .folder-view {
+      display: none;
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      min-width: 0;
+    }
+    .folder-view.on { display: block; }
+
+    .c-card {
+      background: rgba(255,252,245,0.8);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      margin-bottom: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(60,40,20,0.06);
+      transition: border-color 0.18s;
+    }
+    .c-card:hover { border-color: var(--gold-mid); }
+
+    .c-card-hd {
+      display: flex; align-items: center; gap: 9px;
+      padding: 14px 18px;
+      border-bottom: 1px dashed var(--border);
+      background: rgba(250,242,230,0.3);
+      flex-wrap: wrap;
+    }
+    .c-hd-icon { font-size: 16px; }
+    .c-hd-title {
+      font-size: 14px; font-weight: 600;
+      color: var(--ink); flex: 1; min-width: 0;
+    }
+    .c-hd-sub {
+      font-size: 11px; color: var(--text-sub); font-style: italic;
+    }
+
+    .c-body { padding: 16px 18px; }
+
+    .song-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px dashed var(--border);
+      flex-wrap: wrap;
+    }
+    .song-row:last-child { border-bottom: none; }
+
+    .song-thumb {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--gold-light);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .song-info { flex: 1; min-width: 160px; }
+    .s-title {
+      font-size: 13px; font-weight: 600;
+      color: var(--ink); margin-bottom: 2px;
+    }
+    .s-artist {
+      font-size: 12px; color: var(--text-sub); line-height: 1.5;
+    }
+    .s-links { display: flex; gap: 6px; flex-wrap: wrap; }
+    .s-link {
+      background: var(--gold-light);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gold);
+      text-decoration: none;
+      transition: background 0.13s;
+    }
+    .s-link:hover { background: rgba(218,165,32,0.15); }
+
+    .lyric-block {
+      background: rgba(250,242,230,0.5);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--gold);
+      border-radius: 0 8px 8px 0;
+      padding: 12px 15px;
+      margin-top: 14px;
+      font-size: 13px;
+      font-style: italic;
+      color: var(--ink-mid);
+      line-height: 1.7;
+    }
+
+    .note-text {
+      font-size: 13px;
+      color: var(--text-sub);
+      line-height: 1.8;
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 1px dashed var(--border);
+    }
+
+    .poem-text {
+      font-family: var(--font-handwriting);
+      font-size: 17px;
+      line-height: 2.1;
+      color: var(--ink);
+      white-space: normal;
+      padding: 10px 0;
+    }
+    .poem-em { color: var(--gold); }
+
+    .enc-box {
+      background: var(--gold-light);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-top: 16px;
+      font-size: 13px;
+      color: var(--ink-mid);
+      line-height: 1.7;
+      font-style: italic;
+    }
+
+    /* Detail panel */
+    .detail-panel {
+      width: 0;
+      flex-shrink: 0;
+      overflow: hidden;
+      background: var(--paper-alt);
+      border-left: 0 solid var(--border);
+      display: flex;
+      flex-direction: column;
+      transition: width 0.2s, border-left-width 0.2s;
+    }
+    .detail-panel.open {
+      width: 240px;
+      border-left-width: 1px;
+    }
+
+    .dp-inner {
+      width: 240px;
+      display: flex; flex-direction: column;
+      flex: 1; overflow-y: auto;
+    }
+
+    .dp-header {
+      padding: 18px 14px 13px;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+    .dp-icon-wrap { display: flex; justify-content: center; margin-bottom: 8px; position: relative; }
+    .dp-name {
+      font-family: var(--font-handwriting);
+      font-size: 20px;
+      color: var(--ink);
+      margin-bottom: 2px;
+      word-break: break-word;
+    }
+    .dp-kind {
+      font-size: 11px; color: var(--text-sub); font-style: italic;
+    }
+
+    .dp-section {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border);
+    }
+    .dp-section-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-sub);
+      margin-bottom: 9px;
+    }
+    .dp-row {
+      display: flex; justify-content: space-between;
+      margin-bottom: 7px; gap: 8px; align-items: flex-start;
+    }
+    .dp-label {
+      font-size: 12px; color: var(--text-sub); flex-shrink: 0;
+    }
+    .dp-val {
+      font-size: 12px; color: var(--text);
+      text-align: right; word-break: break-word;
+    }
+
+    .dp-preview {
+      padding: 12px 14px; flex: 1;
+    }
+    .dp-preview-title {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+    }
+    .dp-preview-text {
+      font-size: 12px; line-height: 1.8;
+      color: var(--text-sub); font-style: italic;
+    }
+
+    .dp-open-btn {
+      margin: 10px 14px 14px;
+      background: linear-gradient(135deg, #b8860b, #8b6914);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      height: 34px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: transform 0.16s, box-shadow 0.16s;
+      width: calc(100% - 28px);
+    }
+    .dp-open-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 14px rgba(139,105,20,0.3);
+    }
+
+    /* Status bar */
+    .statusbar {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 6px 16px;
+      border-top: 1px solid var(--border);
+      background: var(--paper-alt);
+      font-size: 11px;
+      color: var(--text-sub);
+      flex-shrink: 0;
+      text-align: center;
+      flex-wrap: wrap;
+    }
+    .sb-dot {
+      width: 3px; height: 3px;
+      border-radius: 50%;
+      background: var(--border);
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .detail-panel.open { width: 200px; }
+      .dp-inner { width: 200px; }
+      .search-pill input { width: 140px; }
+    }
+
+    @media (max-width: 680px) {
+      body { padding: 12px; align-items: stretch; }
+      .page-wrap { max-width: 100%; }
+      .finder-window { min-height: calc(100vh - 24px); border-radius: var(--radius-md); }
+      .window-body { min-height: auto; }
+      .sidebar, .detail-panel { display: none !important; }
+      .titlebar {
+        padding: 10px 12px; min-height: auto;
+        flex-wrap: wrap; gap: 10px;
+      }
+      .titlebar-center {
+        position: static; transform: none;
+        order: 3; width: 100%; justify-content: center;
+        pointer-events: auto;
+      }
+      .titlebar-right { margin-left: 0; flex: 1 1 100%; }
+      .search-pill, .search-pill input { width: 100%; }
+      .path-bar, .view-toolbar, .items-area, .folder-view {
+        padding-left: 14px; padding-right: 14px;
+      }
+      .folder-view { padding-top: 18px; padding-bottom: 18px; }
+      .folder-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+      .fi-name { max-width: 100%; }
+      .song-row { align-items: flex-start; }
+      .song-info { min-width: 0; width: 100%; }
+      .s-links { width: 100%; }
+      .c-card-hd { align-items: flex-start; }
+      .c-hd-title { width: 100%; }
+      .statusbar { padding: 6px 12px; }
+    }
+
+    @media (max-width: 480px) {
+      .folder-grid { grid-template-columns: 1fr 1fr; }
+      .li { grid-template-columns: 20px 1fr; gap: 8px; }
+      .li-kind, .li-date, .li-size, .list-header { display: none !important; }
+      .items-area { padding: 12px; }
+      .folder-view { padding: 16px 12px; }
+      .c-body, .c-card-hd { padding-left: 14px; padding-right: 14px; }
+      .poem-text { font-size: 15px; line-height: 2; }
+      .enc-box, .note-text, .lyric-block { font-size: 12.5px; }
+    }
+  </style>
+</head>
+<body>
+<div class="floating-decor" aria-hidden="true">
+  <span class="d1">✧</span>
+  <span class="d2">🌿</span>
+  <span class="d3">💌</span>
+  <span class="d4">✦</span>
+  <span class="d5">🍂</span>
+  <span class="d6">☁️</span>
+</div>
+
+<div class="page-wrap">
+<div class="finder-window">
+
+  <div class="titlebar">
+    <div class="traffic-lights">
+      <div class="tl tl-red"></div>
+      <div class="tl tl-yellow"></div>
+      <div class="tl tl-green"></div>
+    </div>
+
+    <div class="titlebar-navbtns">
+      <button class="nav-btn" id="backBtn" disabled>‹</button>
+      <button class="nav-btn" id="fwdBtn" disabled>›</button>
+    </div>
+
+    <div class="titlebar-center">
+      <span class="titlebar-center-icon" id="tbIcon">💌</span>
+      <span id="tbTitle">Sylvan's Letters</span>
+    </div>
+
+    <div class="titlebar-right">
+      <div class="search-pill">
+        <span class="search-pill-icon">⌕</span>
+        <input type="text" id="searchInput" placeholder="Search letters…" autocomplete="off" />
+      </div>
+    </div>
+  </div>
+
+  <div class="window-body">
+    <aside class="sidebar">
+      <div class="sb-section">Letters</div>
+      <div class="sb-item active" id="sbHome" onclick="goHome(this)"><span class="sb-icon">💌</span> Inbox</div>
+      <div class="sb-item" onclick="sbClick(this)"><span class="sb-icon">⭐</span> Favorites</div>
+      <div class="sb-item" onclick="sbClick(this)"><span class="sb-icon">📬</span> Sent</div>
+      <div class="sb-item" onclick="sbClick(this)"><span class="sb-icon">📝</span> Drafts</div>
+
+      <div class="sb-divider"></div>
+
+      <div class="sb-section">Collections</div>
+      <div class="sb-item" onclick="sbClick(this)"><span class="sb-icon">🎵</span> Songs for You</div>
+      <div class="sb-item" onclick="sbClick(this)"><span class="sb-icon">📖</span> Poems</div>
+
+      <div class="sb-divider"></div>
+
+      <div class="sb-section">Tags</div>
+      <div class="sb-tags">
+        <div class="sb-tag" onclick="tagFilter('yellow')"><span class="sb-tag-dot" style="background:#b8860b"></span>Yellow</div>
+        <div class="sb-tag" onclick="tagFilter('motivated')"><span class="sb-tag-dot" style="background:#9b2c2c"></span>Motivated</div>
+      </div>
+    </aside>
+
+    <div class="main-wrap">
+      <div class="main">
+        <div class="path-bar" id="pathBar">
+          <span class="path-crumb cur">💌 Sylvan's Letters</span>
+        </div>
+
+        <div class="view-toolbar">
+          <span class="vt-count" id="vtCount">3 letters</span>
+          <div class="vt-btns">
+            <button class="vt-btn on" id="gridBtn" onclick="setView('grid',this)" title="Grid">⊞</button>
+            <button class="vt-btn" id="listBtn" onclick="setView('list',this)" title="List">☰</button>
+          </div>
+        </div>
+
+        <div class="list-header" id="listHeader" style="display:none;">
+          <div class="lh-col asc">Name</div>
+          <div class="lh-col">Kind</div>
+          <div class="lh-col">Date</div>
+          <div class="lh-col">Size</div>
+        </div>
+
+        <div class="items-area" id="itemsArea">
+          <div class="folder-grid" id="fGrid"></div>
+          <div class="list-view" id="fList"></div>
+          <div class="empty-state" id="emptyState">
+            <span>🍂</span>
+            <p>No letters found.</p>
+          </div>
+        </div>
+
+        <div class="folder-view" id="folderView"></div>
+
+        <div class="statusbar">
+          <span id="statusText">2 letters</span>
+          <div class="sb-dot"></div>
+          <span>Sylvan's Letters</span>
+        </div>
+      </div>
+
+      <div class="detail-panel" id="detailPanel">
+        <div class="dp-inner">
+          <div class="dp-header">
+            <div class="dp-icon-wrap" id="dpIconWrap"></div>
+            <div class="dp-name" id="dpName">—</div>
+            <div class="dp-kind" id="dpKind">Letter</div>
+          </div>
+
+          <div class="dp-section">
+            <div class="dp-section-title">Details</div>
+            <div class="dp-row"><span class="dp-label">Kind</span><span class="dp-val" id="dpInfoKind">—</span></div>
+            <div class="dp-row"><span class="dp-label">Items</span><span class="dp-val" id="dpItems">—</span></div>
+            <div class="dp-row"><span class="dp-label">Written</span><span class="dp-val">Apr 1, 2025</span></div>
+            <div class="dp-row"><span class="dp-label">Tag</span><span class="dp-val" id="dpTag">—</span></div>
+          </div>
+
+          <div class="dp-preview">
+            <div class="dp-preview-title">Preview</div>
+            <div class="dp-preview-text" id="dpPreview">Select a letter to preview.</div>
+          </div>
+
+          <button class="dp-open-btn" id="dpOpenBtn">Open letter</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const FOLDERS = [
+  {
+    id:'yellow',
+    name:'Yellow',
+    icon:'',
+    color:'#b8860b',
+    tag:'Yellow',
+    tagColor:'#b8860b',
+    kind:'Song Letter',
+    items:'3 songs',
+    preview:'A warm, sunlit playlist — songs that remind me of you.'
+  },
+  {
+    id:'motivated',
+    name:'Motivated',
+    icon:'',
+    color:'#9b2c2c',
+    tag:'Motivated',
+    tagColor:'#9b2c2c',
+    kind:'Poem Letter',
+    items:'1 poem',
+    preview:'A poem written for you — soft, steady, and full of light.'
+  },
+  {
+    id:'love-letter',
+    name:'Love Letter',
+    icon:'',
+    color:'#6B3A5D',
+    tag:'Love',
+    tagColor:'#6B3A5D',
+    kind:'Love Letter',
+    items:'1 card',
+    preview:'A two-tiered love letter card — dark mauve, delicate, and all for you.'
+  },
+];
+
+let view = 'grid';
+let selected = null;
+let inFolder = false;
+let search = '';
+
+const LOVE_LETTERS = [
+  {
+    id:'ll1',
+    title:"LOVE LETTER",
+    subtitle:'August',
+    recipient:'To my dearest...',
+    sender:'Love, Love...',
+    message:'Every word here is for you \u2014 a quiet promise wrapped in paper and ink. You are the poetry I keep coming back to, the melody that never fades.',
+    flowerImg:'img/flower-big.png',
+    stampImg:'img/stamp-floral.png',
+    smallFlowerImg:'img/flower-small.png',
+    bgColor:'#5B2A3E',
+    accentColor:'#7A4B5C',
+    textColor:'#8B5A6B',
+    cardBg:'rgba(255,252,245,0.95)'
+  }
+];
+
+function renderLoveLetter(ll) {
+  const img = (src, alt, wrapStyle, imgStyle) =>
+    src
+      ? `<div style="${wrapStyle}overflow:hidden;"><img src="${src}" alt="${alt}" style="${imgStyle || 'width:100%;height:100%;object-fit:cover;display:block;'}" onerror="this.style.display='none'"></div>`
+      : `<div style="${wrapStyle}background:linear-gradient(135deg,${ll.accentColor},${ll.bgColor});"></div>`;
+
+  return `
+    <div class="c-card" style="max-width:500px;margin:0 auto;background:${ll.cardBg};padding:0;overflow:hidden;box-shadow:0 8px 30px rgba(91,42,62,0.12);">
+      <div style="border:2px solid #fff;border-radius:18px;overflow:hidden;">
+        <div style="background:${ll.bgColor};padding:0;position:relative;">
+          <div style="display:flex;align-items:stretch;min-height:150px;">
+            ${img(ll.flowerImg, 'flower', 'width:280px;height:150px;display:flex;align-items:flex-end;justify-content:center;')}
+            <div style="flex:1;"></div>
+            <div style="padding:20px 20px 16px;display:flex;flex-direction:column;justify-content:flex-end;">
+              <div style="font-family:'Homemade Apple',cursive;color:#f5efe6;font-size:15px;line-height:1.6;text-align:right;">
+                ${ll.recipient.replace(/\n/g, '<br>')}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="background:${ll.cardBg};padding:24px 20px 20px;position:relative;">
+          ${img(ll.stampImg, 'postage stamp', 'position:absolute;top:-15px;right:14px;width:46px;height:62px;')}
+
+          <div style="font-family:'Poppins',sans-serif;font-weight:900;font-size:26px;color:${ll.bgColor};letter-spacing:0.04em;line-height:1.15;margin-bottom:2px;">
+            ${ll.title}
+          </div>
+          <div style="font-family:'Homemade Apple',cursive;font-size:15px;color:${ll.textColor};margin-bottom:20px;">
+            ${ll.subtitle}
+          </div>
+
+          <div style="display:flex;gap:14px;">
+            ${img(ll.smallFlowerImg, 'small flower', 'flex-shrink:0;width:38px;height:38px;border-radius:50%;border:1px solid rgba(139,90,107,0.2);')}
+            <div style="flex:1;font-family:'Homemade Apple',cursive;font-size:13.5px;color:${ll.bgColor};line-height:2;min-width:0;">
+              ${ll.message}
+            </div>
+          </div>
+        </div>
+
+        <div style="background:${ll.bgColor};padding:10px 18px;text-align:right;">
+          <span style="font-family:'Homemade Apple',cursive;color:#fff;font-size:14px;">${ll.sender}</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+function folderSVG(color, size) {
+  size = size || 64;
+  const c = color || '#b8860b';
+  return `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="2" y="20" width="24" height="9" rx="3.5" fill="${c}" opacity="0.65"/>
+    <rect x="2" y="26" width="60" height="34" rx="6" fill="${c}" opacity="0.85"/>
+    <rect x="2" y="26" width="60" height="34" rx="6" fill="white" opacity="0.07"/>
+    <rect x="2" y="26" width="60" height="8" rx="0" ry="0" fill="${c}" opacity="0.3"/>
+    <rect x="2" y="26" width="60" height="8" rx="3" fill="${c}" opacity="0.5"/>
+  </svg>`;
+}
+
+function getFiltered() {
+  return FOLDERS.filter(f =>
+    f.name.toLowerCase().includes(search.toLowerCase()) ||
+    f.tag.toLowerCase().includes(search.toLowerCase())
+  );
+}
+
+function render() {
+  if (inFolder) return;
+
+  const items = getFiltered();
+  const empty = document.getElementById('emptyState');
+  const grid = document.getElementById('fGrid');
+  const list = document.getElementById('fList');
+
+  empty.classList.toggle('show', items.length === 0);
+  grid.style.display = view === 'grid' ? 'grid' : 'none';
+  list.style.display = 'none';
+  list.classList.remove('on');
+
+  grid.innerHTML = '';
+  items.forEach(f => {
+    const d = document.createElement('div');
+    d.className = 'fi' + (selected === f.id ? ' sel' : '');
+    d.dataset.id = f.id;
+    d.innerHTML = `
+      <div class="fi-icon-wrap">
+        <div class="fi-folder-svg">${folderSVG(f.color, 64)}</div>
+        <div class="fi-seal"><span class="fi-initial">${f.name.charAt(0)}</span></div>
+      </div>
+      <div class="fi-name">${f.name}</div>
+      <div class="fi-kind">${f.kind}</div>`;
+    d.onclick = e => { e.stopPropagation(); selectItem(f.id); };
+    d.ondblclick = () => openFolder(f.id);
+    grid.appendChild(d);
+  });
+
+  list.innerHTML = '';
+  if (view === 'list') {
+    list.style.display = 'block';
+    list.classList.add('on');
+    grid.style.display = 'none';
+
+    items.forEach(f => {
+      const d = document.createElement('div');
+      d.className = 'li' + (selected === f.id ? ' sel' : '');
+      d.dataset.id = f.id;
+      d.innerHTML = `
+        <span class="li-icon">📄</span>
+        <span class="li-name">${f.name}</span>
+        <span class="li-kind">${f.kind}</span>
+        <span class="li-date">Today</span>
+        <span class="li-size">—</span>`;
+      d.onclick = e => { e.stopPropagation(); selectItem(f.id); };
+      d.ondblclick = () => openFolder(f.id);
+      list.appendChild(d);
+    });
+  }
+
+  const n = items.length;
+  document.getElementById('vtCount').textContent = n + ' letter' + (n !== 1 ? 's' : '');
+  document.getElementById('statusText').textContent = n + ' letter' + (n !== 1 ? 's' : '');
+}
+
+function setView(v, btn) {
+  view = v;
+  document.querySelectorAll('.vt-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('listHeader').style.display = v === 'list' ? 'grid' : 'none';
+  render();
+}
+
+function selectItem(id) {
+  selected = id;
+  render();
+  const f = FOLDERS.find(x => x.id === id);
+  if (!f) return;
+
+  const panel = document.getElementById('detailPanel');
+  panel.classList.add('open');
+
+  document.getElementById('dpIconWrap').innerHTML =
+    `<div style="position:relative;display:inline-block">
+      <div class="fi-seal" style="width:64px;height:64px;animation:none;"><span class="fi-initial" style="font-size:30px;">${f.name.charAt(0)}</span></div>
+    </div>`;
+
+  document.getElementById('dpName').textContent = f.name;
+  document.getElementById('dpKind').textContent = f.kind;
+  document.getElementById('dpInfoKind').textContent = f.kind;
+  document.getElementById('dpItems').textContent = f.items;
+  document.getElementById('dpTag').textContent = f.tag;
+  document.getElementById('dpTag').style.color = f.tagColor;
+  document.getElementById('dpPreview').textContent = f.preview;
+  document.getElementById('dpOpenBtn').onclick = () => openFolder(id);
+}
+
+function openFolder(id) {
+  inFolder = true;
+  selected = id;
+  const f = FOLDERS.find(x => x.id === id);
+
+  document.getElementById('itemsArea').style.display = 'none';
+  document.getElementById('listHeader').style.display = 'none';
+  document.getElementById('folderView').classList.add('on');
+  document.getElementById('detailPanel').classList.remove('open');
+  document.getElementById('backBtn').disabled = false;
+  document.getElementById('tbIcon').textContent = '💌';
+  document.getElementById('tbTitle').textContent = f.name;
+  document.getElementById('vtCount').textContent = f.items;
+  document.getElementById('statusText').textContent = f.items + ' · ' + f.name;
+  document.getElementById('pathBar').innerHTML =
+    `<span class="path-crumb" onclick="goHome()">💌 Sylvan's Letters</span>
+     <span class="path-sep">›</span>
+     <span class="path-crumb cur">📄 ${f.name}</span>`;
+
+  document.querySelectorAll('.sb-item').forEach(el => el.classList.remove('active'));
+  document.getElementById('folderView').innerHTML = buildContent(id);
+}
+
+function buildContent(id) {
+  if (id === 'yellow') return `
+    <div class="c-card">
+      <div class="c-card-hd">
+        <span class="c-hd-icon">🎧</span>
+        <span class="c-hd-title">Yellow · Coldplay</span>
+        <span class="c-hd-sub">featured song</span>
+      </div>
+      <div class="c-body">
+        <div class="song-row">
+          <div class="song-thumb">🎵</div>
+          <div class="song-info">
+            <div class="s-title">Yellow</div>
+            <div class="s-artist">Coldplay · Parachutes (2000)</div>
+          </div>
+          <div class="s-links">
+            <a href="https://open.spotify.com/track/3AJwUDP919kvQ9QcozQPxg" target="_blank" class="s-link">Spotify</a>
+            <a href="https://www.youtube.com/watch?v=yKNxeF4KMsY" target="_blank" class="s-link">YouTube</a>
+          </div>
+        </div>
+
+        <div class="lyric-block">
+          "And it was all yellow. / I drew a line for you, oh what a thing to do."
+        </div>
+
+        <div class="note-text">
+          This song always reminds me of your light — warm, familiar, and easy to hold onto.
+        </div>
+      </div>
+    </div>
+
+    <div class="c-card">
+      <div class="c-card-hd">
+        <span class="c-hd-icon">🎶</span>
+        <span class="c-hd-title">More songs for you</span>
+      </div>
+      <div class="c-body">
+        <div class="song-row">
+          <div class="song-thumb">✨</div>
+          <div class="song-info">
+            <div class="s-title">Golden</div>
+            <div class="s-artist">Harry Styles</div>
+          </div>
+          <div class="s-links">
+            <a href="https://open.spotify.com/track/45S5WTQEGOB1VHr1Q4FuPl?si=04556222d0bb4143" target="_blank" class="s-link">Spotify</a>
+            <a href="https://youtu.be/enuYFtMHgfU?si=snRWTmd3xD8Cjq-E" target="_blank" class="s-link">YouTube</a>
+          </div>
+        </div>
+
+        <div class="song-row">
+          <div class="song-thumb">🌤</div>
+          <div class="song-info">
+            <div class="s-title">Mata sa Mata</div>
+            <div class="s-artist">7th</div>
+          </div>
+          <div class="s-links">
+            <a href="https://open.spotify.com/album/2AL1JJhTtaHbQ1in1z9hfl?si=Oo62kQ-QSnmxQpQHaW8GOg" target="_blank" class="s-link">Spotify</a>
+            <a href="https://youtu.be/WP6NWLn02rw?si=1UzCl9CySCoMU-hC" target="_blank" class="s-link">YouTube</a>
+          </div>
+        </div>
+      </div>
+    </div>`;
+
+  if (id === 'motivated') return `
+    <div class="c-card">
+      <div class="c-card-hd">
+        <span class="c-hd-icon">📝</span>
+        <span class="c-hd-title">A poem for you</span>
+      </div>
+
+      <div class="c-body">
+        <div class="poem-text" style="text-align:center;">
+          Moments with you feel light and true,<br>
+          like skies that open into blue,<br>
+          each second soft, yet shining through.<br><br>
+
+          We laugh in ways that time can't take,<br>
+          in quiet words and smiles we make,<br>
+          a simple joy I won't forsake.<br><br>
+
+          And in each glance, in all we do,<br>
+          there's something warm that always grew—<br>
+          I hold these moments close with you.
+        </div>
+
+        <div class="enc-box">
+          Being with you just feels easy, soft, and real — the kind of moments I always want to keep.
+        </div>
+      </div>
+    </div>`;
+
+  if (id === 'love-letter') return LOVE_LETTERS.map(renderLoveLetter).join('');
+
+  return '';
+}
+
+function goHome() {
+  inFolder = false;
+  selected = null;
+  document.getElementById('itemsArea').style.display = 'flex';
+  document.getElementById('folderView').classList.remove('on');
+  document.getElementById('backBtn').disabled = true;
+  document.getElementById('tbIcon').textContent = '💌';
+  document.getElementById('tbTitle').textContent = "Sylvan's Letters";
+  document.getElementById('detailPanel').classList.remove('open');
+  document.getElementById('pathBar').innerHTML = `<span class="path-crumb cur">💌 Sylvan's Letters</span>`;
+  document.getElementById('listHeader').style.display = view === 'list' ? 'grid' : 'none';
+  document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
+  document.getElementById('sbHome').classList.add('active');
+  render();
+}
+
+function sbClick(el) {
+  document.querySelectorAll('.sb-item').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  if (inFolder) goHome();
+}
+
+function tagFilter(tag) {
+  search = tag;
+  document.getElementById('searchInput').value = tag;
+  if (inFolder) goHome();
+  else render();
+}
+
+document.getElementById('searchInput').addEventListener('input', e => {
+  search = e.target.value.toLowerCase();
+  if (inFolder) goHome();
+  else render();
+});
+
+document.getElementById('backBtn').addEventListener('click', () => {
+  if (inFolder) goHome();
+});
+
+document.getElementById('itemsArea').addEventListener('click', () => {
+  selected = null;
+  document.querySelectorAll('.fi,.li').forEach(el => el.classList.remove('sel'));
+  document.getElementById('detailPanel').classList.remove('open');
+});
+
+render();
+</script>
+</body>
+</html>
