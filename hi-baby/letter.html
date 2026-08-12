@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>a photo of you — for my yelo</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .a4-stage {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+  .a4 {
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 210 / 297; /* true A4 ratio */
+    background: var(--paper);
+    border: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .a4::before {
+    content: '';
+    position: absolute;
+    inset: 14px;
+    border: 1px dashed var(--line);
+  }
+  .a4-inner {
+    text-align: center;
+    color: var(--slate);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 14px;
+    letter-spacing: 0.03em;
+    line-height: 1.6;
+  }
+  .a4-inner svg { margin-bottom: 14px; opacity: 0.6; }
+  .a4 img {
+    position: absolute;
+    inset: 14px;
+    width: calc(100% - 28px);
+    height: calc(100% - 28px);
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+  .caption-note {
+    text-align: center;
+    max-width: 420px;
+    margin: 0 auto;
+    font-size: 13px;
+    color: var(--slate);
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <a class="back-link" href="index.html">&larr; back home</a>
+
+  <p class="page-title">a letter for you</p>
+  <p class="page-sub">hello, my love!</p>
+
+  <div class="a4-stage">
+    <div class="a4">
+      <img src="https://i.postimg.cc/Z5hX2v3s/letter.png" alt="A Not So Love Letter">
+    </div>
+  </div>
+</div>
+</body>
+</html>
