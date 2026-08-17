@@ -6,27 +6,134 @@
 <title>just in case — for my yelo</title>
 <link rel="stylesheet" href="style.css">
 <style>
-  .letter {
-    max-width: 480px;
+  .notebook-stage {
+    max-width: 520px;
     margin: 0 auto;
+    padding-left: 14px;
+  }
+
+  .notebook {
+    position: relative;
     background: var(--paper);
     border: 1px solid var(--line);
-    padding: 52px 44px;
+    border-radius: 3px;
+    box-shadow: 0 18px 40px rgba(42,51,64,0.10), 0 2px 6px rgba(42,51,64,0.06);
+    padding: 54px 44px;
   }
+
+  /* spiral binding along the left edge */
+  .notebook::before {
+    content: '';
+    position: absolute;
+    left: -13px;
+    top: 26px;
+    bottom: 26px;
+    width: 26px;
+    z-index: 2;
+    pointer-events: none;
+    background-image: radial-gradient(circle, var(--cream) 0 4.5px, transparent 4.6px),
+                       radial-gradient(circle, transparent 0 3px, var(--line) 3px 4.5px, transparent 4.6px);
+    background-size: 26px 26px;
+    background-repeat: repeat-y;
+    background-position: center top;
+  }
+  .notebook::after {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 40px;
+    background: linear-gradient(90deg, rgba(42,51,64,0.05), rgba(42,51,64,0));
+    z-index: 1;
+    pointer-events: none;
+    border-radius: 3px 0 0 3px;
+  }
+
+  /* faint ruled-paper lines for texture */
+  .letter {
+    position: relative;
+    z-index: 2;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent 37px,
+      var(--line) 37.5px,
+      transparent 38px
+    );
+    background-position: 0 4px;
+    padding-left: 22px;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+  }
+  .letter.hidden { display: none; }
+  .letter.fading { opacity: 0; }
+
   .letter p {
     font-family: 'EB Garamond', serif;
-    font-size: 17px;
-    line-height: 1.85;
+    font-size: 16.5px;
+    line-height: 1.9;
     color: var(--ink);
-    margin: 0 0 20px;
+    margin: 0 0 18px;
   }
   .letter p:first-of-type { margin-top: 0; }
   .letter .sign-off {
-    margin-top: 36px;
+    margin-top: 32px;
     font-family: 'Cormorant Garamond', serif;
     font-style: italic;
     font-size: 19px;
     color: var(--harbor-deep);
+  }
+
+  .page-num {
+    display: block;
+    margin-top: 26px;
+    text-align: right;
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: var(--slate);
+  }
+
+  .notebook-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 34px;
+  }
+
+  .flip-btn {
+    font-family: 'EB Garamond', serif;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--harbor-deep);
+    background: none;
+    border: 1px solid var(--harbor);
+    padding: 10px 18px;
+    cursor: pointer;
+    transition: background 0.3s ease, color 0.3s ease;
+  }
+  .flip-btn:hover { background: var(--harbor); color: var(--paper); }
+  .flip-btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+    background: none;
+    color: var(--harbor-deep);
+  }
+
+  .dots { display: flex; gap: 8px; }
+  .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--line);
+    transition: background 0.3s ease;
+  }
+  .dot.active { background: var(--harbor-deep); }
+
+  @media (max-width: 560px) {
+    .notebook { padding: 44px 26px; }
+    .letter { padding-left: 14px; }
+    .notebook::before { left: -10px; width: 20px; background-size: 20px 22px; }
   }
 </style>
 </head>
@@ -38,15 +145,70 @@
   <p class="page-title">just in case</p>
   <p class="page-sub">for whenever you need reminding</p>
 
-  <div class="letter">
-    <p>Mahal,</p>
-    <p>If you're reading this, I know recently your head has been a little louder than usual, and maybe you've been doubting things that don't need doubting. So let me say this plainly, somewhere you can always come back to.</p>
-    <p>You are not too much. You are not hard to love. Nothing about you has ever made me want to leave. I chose you on the easy days, and I'll choose you on the hard ones too. That hasn't changed, and it isn't going to.</p>
-    <p>Whatever you're carrying right now, you don't have to carry it alone or think that I'm not here. I am here. I'm not going anywhere.</p>
-    <p>Come back to this page whenever you need to. I meant every word, and I'll keep meaning them.</p>
-    <p class="sign-off">Yours, certainly &mdash; Your Baby</p>
+  <div class="notebook-stage">
+    <div class="notebook" id="notebook">
+
+      <div class="letter" id="page1">
+        <p>Mahal,</p>
+        <p>If you're reading this, I know recently your head has been a little louder than usual, and maybe you've been doubting things that don't need doubting. So let me say this plainly, somewhere you can always come back to.</p>
+        <p>You are not too much. You are not hard to love. Nothing about you has ever made me want to leave. I chose you on the easy days, and I'll choose you on the hard ones too. That hasn't changed, and it isn't going to.</p>
+        <p>Whatever you're carrying right now, you don't have to carry it alone or think that I'm not here. I am here. I'm not going anywhere.</p>
+        <p>Come back to this page whenever you need to. I meant every word, and I'll keep meaning them.</p>
+        <p class="sign-off">Yours, certainly &mdash; Your Baby</p>
+        <span class="page-num">1</span>
+      </div>
+
+      <div class="letter hidden" id="page2">
+        <p>Jo,</p>
+        <p>If the first page was not enough and the voices in your head are still loud, then let this be your reminder: you are loved, you are wanted, and you are safe with me. You don't have to question whether I mean what I say, because I do. I wouldn't stay, choose you, and keep showing up if I didn't genuinely want you in my life.</p>
+        <p>Whatever your mind is telling you right now, please don't let it convince you that you're difficult to love. You don't have to be perfect, calm, or certain all the time for me to love you. You can be emotional, you can overthink, you can have bad days—and i'll still be here.</p>
+        <p>So breathe, baby. You don't have to figure everything out tonight. Come back to these words whenever you need to, and remember that my love for you isn't something you have to earn every day. I'm here, i'm choosing you, and i'm not going anywhere.</p>
+        <p class="sign-off">Yours, certainly &mdash; Your Baby</p>
+        <span class="page-num">2</span>
+      </div>
+
+    </div>
+
+    <div class="notebook-controls">
+      <button class="flip-btn" id="prevBtn" disabled>&larr; back</button>
+      <div class="dots">
+        <span class="dot active" id="dot1"></span>
+        <span class="dot" id="dot2"></span>
+      </div>
+      <button class="flip-btn" id="nextBtn">next &rarr;</button>
+    </div>
   </div>
 
 </div>
+
+<script>
+  const page1 = document.getElementById('page1');
+  const page2 = document.getElementById('page2');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  const dot1 = document.getElementById('dot1');
+  const dot2 = document.getElementById('dot2');
+
+  function goToPage(page) {
+    const showing = page === 2 ? page2 : page1;
+    const hiding = page === 2 ? page1 : page2;
+
+    hiding.classList.add('fading');
+    setTimeout(() => {
+      hiding.classList.add('hidden');
+      hiding.classList.remove('fading');
+      showing.classList.remove('hidden');
+      requestAnimationFrame(() => showing.classList.remove('fading'));
+    }, 250);
+
+    nextBtn.disabled = page === 2;
+    prevBtn.disabled = page === 1;
+    dot1.classList.toggle('active', page === 1);
+    dot2.classList.toggle('active', page === 2);
+  }
+
+  nextBtn.addEventListener('click', () => goToPage(2));
+  prevBtn.addEventListener('click', () => goToPage(1));
+</script>
 </body>
 </html>
