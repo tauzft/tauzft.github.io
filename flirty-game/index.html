@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Game</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+  :root{
+    --blush: #fbe6ec;
+    --cream: #fff6f2;
+    --rose: #e0527c;
+    --rose-deep: #b83a63;
+    --gold: #f0b429;
+    --plum: #4a2540;
+    --plum-soft: #7c5b6f;
+  }
+
+  *{ box-sizing:border-box; }
+
+  body{
+    margin:0;
+    min-height:100vh;
+    background: radial-gradient(circle at 20% 10%, #ffe3ec 0%, var(--blush) 45%, #f8d8e3 100%);
+    font-family:'Poppins', sans-serif;
+    color: var(--plum);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 30px 16px;
+    overflow-x:hidden;
+  }
+
+  .wrap{
+    max-width: 460px;
+    width:100%;
+    text-align:center;
+    position:relative;
+  }
+
+  h1{
+    font-family:'Dancing Script', cursive;
+    font-size: 52px;
+    color: var(--rose-deep);
+    margin: 0 0 4px 0;
+    line-height:1;
+  }
+
+  .subtitle{
+    font-size: 13px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color: var(--plum-soft);
+    margin-bottom: 22px;
+    font-weight:600;
+  }
+
+  .bubble{
+    background:#fff;
+    border-radius: 18px;
+    padding: 12px 18px;
+    margin: 0 auto 20px auto;
+    max-width: 340px;
+    font-size: 14.5px;
+    color: var(--plum);
+    box-shadow: 0 6px 18px rgba(184,58,99,.12);
+    position:relative;
+    min-height: 20px;
+    transition: transform .2s ease;
+  }
+  .bubble:after{
+    content:"";
+    position:absolute;
+    bottom:-8px;
+    left:50%;
+    transform:translateX(-50%);
+    border-width:8px 8px 0 8px;
+    border-style:solid;
+    border-color:#fff transparent transparent transparent;
+  }
+
+  .score{
+    display:flex;
+    justify-content:center;
+    gap: 22px;
+    margin-bottom: 18px;
+    font-size: 13px;
+    color: var(--plum-soft);
+    font-weight:600;
+  }
+  .score span.num{
+    display:block;
+    font-family:'Dancing Script', cursive;
+    font-size: 26px;
+    color: var(--rose-deep);
+  }
+
+  .board{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    background: linear-gradient(135deg, var(--rose), var(--gold));
+    padding: 10px;
+    border-radius: 24px;
+    box-shadow: 0 14px 30px rgba(184,58,99,.25);
+    aspect-ratio: 1/1;
+  }
+
+  .cell{
+    background: var(--cream);
+    border-radius: 16px;
+    border:none;
+    font-size: 34px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+    transition: transform .15s ease, background .2s ease;
+    color: var(--rose-deep);
+    user-select:none;
+  }
+  .cell:hover:not(:disabled){
+    transform: scale(1.04);
+    background:#ffeef3;
+  }
+  .cell:disabled{ cursor:default; }
+  .cell.pop{ animation: pop .25s ease; }
+  @keyframes pop{
+    0%{ transform:scale(.4); opacity:0; }
+    70%{ transform:scale(1.15); }
+    100%{ transform:scale(1); opacity:1; }
+  }
+
+  .cell.bot{ color: var(--gold); }
+
+  .cell.win{
+    background: linear-gradient(135deg, #ffd9e3, #ffe9b8);
+    box-shadow: inset 0 0 0 2px var(--rose);
+  }
+
+  .controls{
+    margin-top: 22px;
+    display:flex;
+    justify-content:center;
+    gap: 12px;
+  }
+
+  button.restart{
+    background: var(--rose-deep);
+    color:#fff;
+    border:none;
+    padding: 12px 26px;
+    border-radius: 30px;
+    font-family:'Poppins', sans-serif;
+    font-weight:600;
+    font-size: 14px;
+    cursor:pointer;
+    box-shadow: 0 8px 18px rgba(184,58,99,.3);
+    transition: background .2s ease, transform .15s ease;
+  }
+  button.restart:hover{ background:#9c2f52; transform: translateY(-1px); }
+
+  .legend{
+    margin-top: 18px;
+    font-size: 12px;
+    color: var(--plum-soft);
+    display:flex;
+    justify-content:center;
+    gap: 18px;
+  }
+
+  .heart-float{
+    position:fixed;
+    top: 100%;
+    font-size: 22px;
+    pointer-events:none;
+    animation: floatUp 2.4s ease-in forwards;
+    z-index: 50;
+  }
+  @keyframes floatUp{
+    0%{ transform: translateY(0) rotate(0deg); opacity:1; }
+    100%{ transform: translateY(-110vh) rotate(25deg); opacity:0; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .cell.pop, .heart-float{ animation: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <h1>Bub, Tic-Tac-Toe Tayo</h1>
+  <div class="subtitle">You vs. Baby</div>
+
+  <div class="bubble" id="bubble">Hi, Baby ko! Ikaw muna 😘</div>
+
+  <div class="score">
+    <div>You <span class="num" id="scoreYou">0</span></div>
+    <div>Ties <span class="num" id="scoreTie">0</span></div>
+    <div>Baby <span class="num" id="scoreBot">0</span></div>
+  </div>
+
+  <div class="board" id="board"></div>
+
+  <div class="legend">
+    <div>❤️ You</div>
+    <div>😘 Baby</div>
+  </div>
+
+  <div class="controls">
+    <button class="restart" id="restartBtn">One more round?</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const boardEl = document.getElementById('board');
+  const bubbleEl = document.getElementById('bubble');
+  const restartBtn = document.getElementById('restartBtn');
+  const scoreYouEl = document.getElementById('scoreYou');
+  const scoreBotEl = document.getElementById('scoreBot');
+  const scoreTieEl = document.getElementById('scoreTie');
+
+  const HUMAN = 'H';
+  const BOT = 'B';
+
+  let cells = Array(9).fill(null);
+  let gameOver = false;
+  let locked = false; // true while it's "Baby"'s turn, so you have time to read the line
+  let scores = { H: 0, B: 0, T: 0 };
+  const BOT_THINK_MS = 2000; // delay before Baby moves
+  const BOT_LINE_MS = 1600; // how long Baby's line stays up before you can move again
+
+  const lines = [
+    [0,1,2],[3,4,5],[6,7,8],
+    [0,3,6],[1,4,7],[2,5,8],
+    [0,4,8],[2,4,6]
+  ];
+
+  const humanMoveLines = [
+    "Uy, ang galing mo naman 😍",
+    "Baby ko, ang smart mo po",
+    "I love you, that was a good move",
+    "Luh, sino nagturo sa'yo niyan?",
+    "Cute mo po 'pag nag-iisip ka ng move",
+    "Okay okay, I'm impressed",
+    "Ay ang lakas, crush talaga kita",
+    "Hala, galing! Sana all",
+    "Go baby go! Ang galing mo",
+    "Hey, nice one baby",
+    "Wow, what if date tayo?",
+    "Nakakakilig ka kalaro deym",
+    "Grabe ang confidence, type ko 'to",
+    "Swabeng moves, love! Ang galing mo",
+  ];
+
+  const botMoveLines = [
+    "Ako naman, love 💌",
+    "Sandali lang, pag-iisapan ko muna",
+    "I miss you nga pala. Ito na move ko",
+    "'Wag kang mag-alala, cute game lang 'to",
+    "Okay lang ba 'to?",
+    "Teka lang ha, napaisip ako",
+    "I'm here lang baby ah?",
+    "My turn. BTW miss na miss kita",
+    "Alam mo bang mahal na mahal kita?",
+    "Hey, I love you. Ay wait ako na pala",
+    "I'm thinking... pero miss na kita",
+    "Konti na lang, kaya natin 'to",
+    "Uy, mali ata? Hayaan na, type naman kita",
+    "Bubba, crush na crush kita",
+  ];
+
+  const winHuman = [
+    "You win! I love you 😍",
+    "You did it! I love you so much",
+    "Okay fine, ikaw na. I love you, baby",
+    "Galing ng boss baby ko oh. Type talaga kita",
+    "Panalo ka na nga, panalo ka pa sa puso ko",
+    "Ang galing mo, hindi ko na kaya. I miss you!",
+    "Congrats, love! Galing ng baby ko oh",
+  ];
+
+  const winBot = [
+    "Oh no, panalo ako! 'Wag ka po tampo, love 🥺",
+    "I win! Pero ikaw pa rin panalo sa puso't isipan ko",
+    "Yehey! Sorry baby, minsan lang naman ako manalo",
+    "Panalo! I love you",
+    "I win, baby! Kiss sana yung prize ko hehe",
+    "Sorry, bub. Bawi ka ulit!",
+  ];
+
+  const ties = [
+    "Uy draw. Swak na swak parang tayo",
+    "Tie game. Miss you though",
+    "Walang panalo, walang talo. Ikaw pa rin ang baby ko",
+    "Tabla lang. Pareho tayong panalo sa isa't isa",
+    "I love you, you love me. Panalo pa rin",
+    "Tie! We're both winners in my heart",
+  ];
+
+  function pickLine(arr, lastRef){
+    if (arr.length === 1) return arr[0];
+    let choice;
+    do {
+      choice = randomFrom(arr);
+    } while (choice === lastRef.value);
+    lastRef.value = choice;
+    return choice;
+  }
+
+  const lastHuman = { value: null };
+  const lastBot = { value: null };
+  const lastEnd = { value: null };
+
+  function randomFrom(arr){
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function setBubble(text){
+    bubbleEl.textContent = text;
+  }
+
+  function render(){
+    boardEl.innerHTML = '';
+    cells.forEach((val, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'cell' + (val === BOT ? ' bot' : '');
+      btn.disabled = !!val || gameOver || locked;
+      btn.textContent = val === HUMAN ? '❤️' : (val === BOT ? '😘' : '');
+      btn.addEventListener('click', () => handleHumanMove(i));
+      boardEl.appendChild(btn);
+    });
+  }
+
+  function checkWinner(bd){
+    for (const line of lines){
+      const [a,b,c] = line;
+      if (bd[a] && bd[a] === bd[b] && bd[b] === bd[c]){
+        return { player: bd[a], line };
+      }
+    }
+    if (bd.every(c => c)) return { player: 'TIE', line: null };
+    return null;
+  }
+
+  function highlightWin(line){
+    if (!line) return;
+    const cellEls = boardEl.querySelectorAll('.cell');
+    line.forEach(i => cellEls[i].classList.add('win'));
+  }
+
+  function spawnHearts(){
+    const emojis = ['💕','💗','💖','💘','✨'];
+    for (let i = 0; i < 14; i++){
+      setTimeout(() => {
+        const el = document.createElement('div');
+        el.className = 'heart-float';
+        el.textContent = randomFrom(emojis);
+        el.style.left = Math.random() * 100 + 'vw';
+        el.style.fontSize = (16 + Math.random()*16) + 'px';
+        document.body.appendChild(el);
+        setTimeout(() => el.remove(), 2500);
+      }, i * 90);
+    }
+  }
+
+  function endGame(result){
+    gameOver = true;
+    if (result.player === HUMAN){
+      scores.H++;
+      setBubble(pickLine(winHuman, lastEnd));
+      spawnHearts();
+    } else if (result.player === BOT){
+      scores.B++;
+      setBubble(pickLine(winBot, lastEnd));
+    } else {
+      scores.T++;
+      setBubble(pickLine(ties, lastEnd));
+    }
+    updateScores();
+    render();
+    if (result.line) highlightWin(result.line);
+  }
+
+  function updateScores(){
+    scoreYouEl.textContent = scores.H;
+    scoreBotEl.textContent = scores.B;
+    scoreTieEl.textContent = scores.T;
+  }
+
+  function handleHumanMove(i){
+    if (gameOver || locked || cells[i]) return;
+    cells[i] = HUMAN;
+    render();
+    animatePop(i);
+    const result = checkWinner(cells);
+    if (result){
+      endGame(result);
+      return;
+    }
+    setBubble(pickLine(humanMoveLines, lastHuman));
+    locked = true;
+    render();
+    setTimeout(botMove, BOT_THINK_MS);
+  }
+
+  function animatePop(i){
+    const cellEls = boardEl.querySelectorAll('.cell');
+    if (cellEls[i]) cellEls[i].classList.add('pop');
+  }
+
+  // Minimax for optimal play
+  function minimax(bd, depth, isMaximizing){
+    const result = checkWinner(bd);
+    if (result){
+      if (result.player === BOT) return 10 - depth;
+      if (result.player === HUMAN) return depth - 10;
+      return 0;
+    }
+    if (isMaximizing){
+      let best = -Infinity;
+      for (let i = 0; i < 9; i++){
+        if (!bd[i]){
+          bd[i] = BOT;
+          best = Math.max(best, minimax(bd, depth+1, false));
+          bd[i] = null;
+        }
+      }
+      return best;
+    } else {
+      let best = Infinity;
+      for (let i = 0; i < 9; i++){
+        if (!bd[i]){
+          bd[i] = HUMAN;
+          best = Math.min(best, minimax(bd, depth+1, true));
+          bd[i] = null;
+        }
+      }
+      return best;
+    }
+  }
+
+  function bestBotMove(){
+    let bestScore = -Infinity;
+    let move = null;
+    for (let i = 0; i < 9; i++){
+      if (!cells[i]){
+        cells[i] = BOT;
+        const score = minimax(cells, 0, false);
+        cells[i] = null;
+        if (score > bestScore){
+          bestScore = score;
+          move = i;
+        }
+      }
+    }
+    return move;
+  }
+
+  function randomBotMove(){
+    const open = cells.map((v,i)=>v?null:i).filter(v=>v!==null);
+    return randomFrom(open);
+  }
+
+  function botMove(){
+    if (gameOver) return;
+    // Baby plays optimally 65% of the time, and a little carelessly the rest —
+    // enough charm to be beatable, not enough to be a pushover.
+    const move = Math.random() < 0.65 ? bestBotMove() : randomBotMove();
+    if (move === null || move === undefined) return;
+    cells[move] = BOT;
+    render();
+    animatePop(move);
+    const result = checkWinner(cells);
+    if (result){
+      endGame(result);
+      return;
+    }
+    setBubble(pickLine(botMoveLines, lastBot));
+    setTimeout(() => {
+      locked = false;
+      render();
+    }, BOT_LINE_MS);
+  }
+
+  function restart(){
+    cells = Array(9).fill(null);
+    gameOver = false;
+    locked = false;
+    document.querySelectorAll('.heart-float').forEach(el => el.remove());
+    setBubble("Hi, Baby! Ikaw muna 😘");
+    render();
+  }
+
+  restartBtn.addEventListener('click', restart);
+
+  render();
+  updateScores();
+})();
+</script>
+
+</body>
+</html>
