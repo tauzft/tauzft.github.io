@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>i like you flinn elijah</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background: #f7efe7;
+  font-family: 'Inter', sans-serif;
+  color: #4d4036;
+}
+
+/* TITLE */
+.title {
+  margin-bottom: 40px;
+
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: .18em;
+  text-transform: lowercase;
+
+  opacity: .9;
+}
+
+/* BOARD */
+.board {
+  display: grid;
+
+  grid-template-columns: repeat(4, 92px);
+  gap: 14px;
+
+  perspective: 1000px;
+}
+
+/* CARD */
+.card {
+  width: 92px;
+  height: 92px;
+
+  position: relative;
+
+  cursor: pointer;
+
+  transform-style: preserve-3d;
+  transition: transform .55s ease;
+}
+
+.card.flipped {
+  transform: rotateY(180deg);
+}
+
+.card.matched {
+  transform: rotateY(180deg) scale(.96);
+  opacity: .7;
+}
+
+/* FACES */
+.face {
+  position: absolute;
+  inset: 0;
+
+  border-radius: 18px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  backface-visibility: hidden;
+
+  box-shadow:
+    0 4px 10px rgba(0,0,0,.04);
+
+  font-size: .92rem;
+  font-weight: 600;
+
+  padding: 10px;
+  text-align: center;
+}
+
+/* FRONT */
+.front {
+  background: #fffaf6;
+  border: 1px solid #efe3d7;
+
+  color: #c2a892;
+
+  font-size: 1.5rem;
+}
+
+/* BACK */
+.back {
+  background: #ffffff;
+
+  border: 1px solid #eadbcc;
+
+  color: #5b4b40;
+
+  transform: rotateY(180deg);
+}
+
+/* OVERLAY */
+.overlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(247,239,231,.82);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  opacity: 0;
+  pointer-events: none;
+
+  transition: .3s ease;
+}
+
+.overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal {
+  background: white;
+
+  padding: 36px;
+
+  border-radius: 28px;
+
+  text-align: center;
+
+  box-shadow:
+    0 10px 30px rgba(0,0,0,.06);
+}
+
+.modal h1 {
+  font-size: 1.4rem;
+  font-weight: 600;
+
+  margin-bottom: 10px;
+
+  color: #4f4137;
+}
+
+.modal p {
+  color: #8a7666;
+
+  margin-bottom: 24px;
+
+  line-height: 1.5;
+}
+
+button {
+  border: none;
+  outline: none;
+
+  background: #4f4137;
+  color: white;
+
+  padding: 12px 20px;
+
+  border-radius: 999px;
+
+  font-family: inherit;
+  font-size: .95rem;
+
+  cursor: pointer;
+
+  transition: .2s ease;
+}
+
+button:hover {
+  opacity: .9;
+  transform: translateY(-1px);
+}
+
+.caption {
+  margin-top: 30px;
+
+  font-size: .85rem;
+  color: #9a8677;
+
+  letter-spacing: .08em;
+  text-transform: lowercase;
+}
+
+@media (max-width: 600px) {
+
+  .board {
+    grid-template-columns: repeat(4, 72px);
+    gap: 10px;
+  }
+
+  .card {
+    width: 72px;
+    height: 72px;
+  }
+
+  .face {
+    font-size: .72rem;
+    border-radius: 14px;
+  }
+
+  .title {
+    font-size: .95rem;
+    margin-bottom: 28px;
+  }
+
+  .caption {
+    font-size: .72rem;
+    padding: 0 20px;
+    text-align: center;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="title">
+  i like you flinn elijah
+</div>
+
+<div class="board" id="board"></div>
+
+<div class="caption">
+  match the pairs
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+
+    <h1>you finished</h1>
+
+    <p>
+      okay but seriously,<br>
+      i like you flinn elijah.
+    </p>
+
+    <button id="restart">
+      play again
+    </button>
+
+  </div>
+</div>
+
+<script>
+const board = document.getElementById('board');
+const overlay = document.getElementById('overlay');
+const restart = document.getElementById('restart');
+
+const words = [
+  'i',
+  'like',
+  'you',
+  'flinn',
+  'elijah',
+  'always',
+  'cute',
+  'us'
+];
+
+let firstCard = null;
+let secondCard = null;
+let lock = false;
+let matches = 0;
+
+/* SHUFFLE */
+function shuffle(array) {
+
+  for (let i = array.length - 1; i > 0; i--) {
+
+    const j = Math.floor(Math.random() * (i + 1));
+
+    [array[i], array[j]] =
+    [array[j], array[i]];
+  }
+
+  return array;
+}
+
+/* CREATE CARD */
+function createCard(word) {
+
+  const card = document.createElement('div');
+
+  card.className = 'card';
+
+  card.dataset.word = word;
+
+  card.innerHTML = `
+    <div class="face front">♡</div>
+    <div class="face back">${word}</div>
+  `;
+
+  card.addEventListener('click', flipCard);
+
+  return card;
+}
+
+/* FLIP */
+function flipCard() {
+
+  if (
+    lock ||
+    this === firstCard ||
+    this.classList.contains('matched')
+  ) return;
+
+  this.classList.add('flipped');
+
+  if (!firstCard) {
+
+    firstCard = this;
+    return;
+  }
+
+  secondCard = this;
+
+  checkMatch();
+}
+
+/* CHECK */
+function checkMatch() {
+
+  const same =
+    firstCard.dataset.word ===
+    secondCard.dataset.word;
+
+  if (same) {
+
+    firstCard.classList.add('matched');
+    secondCard.classList.add('matched');
+
+    matches++;
+
+    resetTurn();
+
+    if (matches === words.length) {
+
+      setTimeout(() => {
+        overlay.classList.add('show');
+      }, 500);
+    }
+
+  } else {
+
+    lock = true;
+
+    setTimeout(() => {
+
+      firstCard.classList.remove('flipped');
+      secondCard.classList.remove('flipped');
+
+      resetTurn();
+
+    }, 800);
+  }
+}
+
+/* RESET TURN */
+function resetTurn() {
+
+  [firstCard, secondCard] =
+  [null, null];
+
+  lock = false;
+}
+
+/* START GAME */
+function startGame() {
+
+  overlay.classList.remove('show');
+
+  board.innerHTML = '';
+
+  matches = 0;
+
+  const cards =
+    shuffle([...words, ...words]);
+
+  cards.forEach(word => {
+    board.appendChild(createCard(word));
+  });
+}
+
+restart.addEventListener('click', startGame);
+
+startGame();
+</script>
+
+</body>
+</html>
