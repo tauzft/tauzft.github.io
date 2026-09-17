@@ -1,0 +1,18 @@
+.admin-dashboard, .admin-products, .admin-orders, .admin-customers, .admin-categories, .admin-reports { padding: 2rem 1rem; }
+.dashboard-stats { display: flex; gap: 2rem; margin-bottom: 2rem; flex-wrap: wrap; }
+.stat-card { flex: 1; min-width: 200px; padding: 2rem; background: #fff; border-radius: 8px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+.stat-card h3 { color: #e91e63; margin-bottom: 0.5rem; }
+.stat-number { font-size: 2rem; font-weight: bold; color: #333; }
+.stat-card a { display: inline-block; margin-top: 1rem; color: #e91e63; }
+.dashboard-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+.admin-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; margin-top: 1rem; }
+.admin-table th, .admin-table td { padding: 1rem; border: 1px solid #eee; text-align: left; }
+.admin-table th { background: #f5f5f5; font-weight: 600; }
+.admin-table tr:hover { background: #f9f9f9; }
+.add-form { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+.add-form input { flex: 1; min-width: 200px; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; }
+.status-form select { padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; }
+.reports-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 2rem; }
+.report-card { padding: 2rem; background: #fff; border-radius: 8px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+.report-card h3 { color: #e91e63; margin-bottom: 0.5rem; }
+.report-number { font-size: 2.5rem; font-weight: bold; color: #333; }

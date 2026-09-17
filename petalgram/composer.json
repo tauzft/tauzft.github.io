@@ -1,0 +1,14 @@
+{
+    "name": "petalgram/flower-shop",
+    "description": "Flower Shop Ordering System",
+    "type": "project",
+    "require": {
+        "php": "^8.1",
+        "codeigniter4/framework": "^4.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/"
+        }
+    }
+}
