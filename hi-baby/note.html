@@ -127,6 +127,7 @@
     border-radius: 50%;
     background: var(--line);
     transition: background 0.3s ease;
+    cursor: pointer;
   }
   .dot.active { background: var(--harbor-deep); }
 
@@ -167,13 +168,24 @@
         <span class="page-num">2</span>
       </div>
 
+      <div class="letter hidden" id="page3">
+        <p>Bubba,</p>
+        <p>I know I'm not the best boyfriend. I get things wrong, I miss things I should have noticed, and there are days I don't show up the way you deserve. I'm not going to pretend otherwise. But I'm still here, still trying, and still willing to keep learning how to love you better.</p>
+        <p>You don't have to settle for who I am today, because I'm working on it—for you, for us. Every time I fall short, I'm choosing to try again instead of giving up. That's the promise I can actually keep: I will keep trying to be the best for you.</p>
+        <p>And while I'm here, let me say the thing you never believe when I say it: you are beautiful. Not just the way you look, though you are—but the way you care, the way you notice the small things, the way you keep loving people even when it costs you something. You are pretty inside and out, and I wish you could see yourself the way I see you.</p>
+        <p>So keep me around while I get better at this. I'll keep choosing you, and I'll keep telling you how lovely you are until you finally believe it.</p>
+        <p class="sign-off">Yours, certainly &mdash; Your Baby</p>
+        <span class="page-num">3</span>
+      </div>
+
     </div>
 
     <div class="notebook-controls">
       <button class="flip-btn" id="prevBtn" disabled>&larr; back</button>
       <div class="dots">
-        <span class="dot active" id="dot1"></span>
-        <span class="dot" id="dot2"></span>
+        <span class="dot active" data-page="1"></span>
+        <span class="dot" data-page="2"></span>
+        <span class="dot" data-page="3"></span>
       </div>
       <button class="flip-btn" id="nextBtn">next &rarr;</button>
     </div>
@@ -182,33 +194,41 @@
 </div>
 
 <script>
-  const page1 = document.getElementById('page1');
-  const page2 = document.getElementById('page2');
+  const pages = [
+    document.getElementById('page1'),
+    document.getElementById('page2'),
+    document.getElementById('page3')
+  ];
+  const dots = Array.from(document.querySelectorAll('.dot'));
   const prevBtn = document.getElementById('prevBtn');
   const nextBtn = document.getElementById('nextBtn');
-  const dot1 = document.getElementById('dot1');
-  const dot2 = document.getElementById('dot2');
+
+  let current = 1;
 
   function goToPage(page) {
-    const showing = page === 2 ? page2 : page1;
-    const hiding = page === 2 ? page1 : page2;
+    if (page === current || page < 1 || page > pages.length) return;
+
+    const showing = pages[page - 1];
+    const hiding = pages[current - 1];
+    current = page;
 
     hiding.classList.add('fading');
     setTimeout(() => {
       hiding.classList.add('hidden');
       hiding.classList.remove('fading');
+      showing.classList.add('fading');
       showing.classList.remove('hidden');
       requestAnimationFrame(() => showing.classList.remove('fading'));
     }, 250);
 
-    nextBtn.disabled = page === 2;
     prevBtn.disabled = page === 1;
-    dot1.classList.toggle('active', page === 1);
-    dot2.classList.toggle('active', page === 2);
+    nextBtn.disabled = page === pages.length;
+    dots.forEach((dot, i) => dot.classList.toggle('active', i === page - 1));
   }
 
-  nextBtn.addEventListener('click', () => goToPage(2));
-  prevBtn.addEventListener('click', () => goToPage(1));
+  nextBtn.addEventListener('click', () => goToPage(current + 1));
+  prevBtn.addEventListener('click', () => goToPage(current - 1));
+  dots.forEach(dot => dot.addEventListener('click', () => goToPage(Number(dot.dataset.page))));
 </script>
 </body>
 </html>
