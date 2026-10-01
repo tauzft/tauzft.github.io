@@ -42,12 +42,19 @@
     return id;
   })();
 
-  var state = store.get("revel.ledger", null) || { claims: 0, album: {}, lastName: "" };
+  var state = store.get("revel.ledger", null) || {};
   if (!state.album || typeof state.album !== "object") state.album = {};
-  if (typeof state.claims !== "number") state.claims = 0;
-  if (typeof state.lastName !== "string") state.lastName = "";
+  if (!Array.isArray(state.cards)) state.cards = [];
+  if (typeof state.allowance !== "number") state.allowance = 0;
+  if (typeof state.name !== "string") state.name = "";
+  if (state.card && findVerdict(state.card.id)) {
+    state.cards = [state.card];
+    if (!state.allowance) state.allowance = 1;
+  }
+  state.card = null;
   var KNOWN = {};
   VERDICTS.forEach(function (v) { KNOWN[v.id] = true; });
+  state.cards = state.cards.filter(function (c) { return c && findVerdict(c.id); });
   Object.keys(state.album).forEach(function (k) { if (!KNOWN[k]) delete state.album[k]; });
 
   var el = {
@@ -68,6 +75,9 @@
     pctFill: document.getElementById("pctFill"),
     pctText: document.getElementById("pctText"),
     actions: document.getElementById("actions"),
+    btnAgain: document.getElementById("btnAgain"),
+    draws: document.getElementById("draws"),
+    finalNote: document.getElementById("finalNote"),
     btnSave: document.getElementById("btnSave"),
     btnCollection: document.getElementById("btnCollection"),
     collection: document.getElementById("collection"),
@@ -296,6 +306,36 @@
     return null;
   }
 
+  function rollAllowance() {
+    return 1 + Math.floor(Math.random() * 3);
+  }
+
+  function lastCard() {
+    return state.cards.length ? state.cards[state.cards.length - 1] : null;
+  }
+
+  function drawsLeft() {
+    return Math.max(0, state.allowance - state.cards.length);
+  }
+
+  function isFinal() {
+    return state.cards.length > 0 && drawsLeft() === 0;
+  }
+
+  function updateChrome() {
+    var left = drawsLeft();
+    el.counterBadge.textContent = "CARDS: " + state.cards.length + "/" + state.allowance;
+    el.draws.textContent = isFinal()
+      ? "FINAL CARD · NO DRAWS LEFT"
+      : "CARDS DRAWN " + state.cards.length + " / " + state.allowance + " · " + left + " LEFT";
+
+    el.btnAgain.hidden = isFinal();
+    el.btnAgain.textContent = left > 1
+      ? "↻ CONFESS AGAIN · " + left + " LEFT"
+      : "↻ CONFESS AGAIN · LAST ONE";
+    el.finalNote.hidden = !isFinal();
+  }
+
   function paint(snap, restored, instant) {
     var v = findVerdict(snap.id) || VERDICTS[0];
     var meta = RARITIES[v.rarity];
@@ -308,7 +348,9 @@
     el.cardLine.textContent = v.line;
     el.cardName.textContent = "CONFESSOR: " + (snap.name || visitor);
     el.cardSerial.textContent = snap.serial || "CONF 0000";
-    el.cardDrop.textContent = snap.drop || "DROP 01";
+    el.cardDrop.textContent = isFinal()
+      ? "FINAL " + state.cards.length + "/" + state.allowance
+      : "DRAW " + state.cards.length + "/" + state.allowance;
 
     revealed = !!restored;
     drawing = false;
@@ -318,6 +360,7 @@
     el.panelStart.hidden = true;
     el.cardZone.hidden = false;
     el.card.classList.remove("just-revealed");
+    updateChrome();
 
     if (restored) {
       el.foil.style.opacity = "0";
@@ -345,17 +388,25 @@
   }
 
   function deal(name) {
+    if (isFinal()) return;
+    if (!state.allowance) state.allowance = rollAllowance();
+
     var v = rollVerdict();
+    var n = state.cards.length + 1;
     var snap = {
       id: v.id,
       name: name,
-      serial: serialFor(v, state.claims),
-      drop: "DROP " + String((state.claims || 0) + 1).padStart(2, "0"),
+      serial: serialFor(v, n),
+      drop: "DRAW " + n + "/" + state.allowance,
       scratched: false
     };
-    state.card = snap;
+    state.cards.push(snap);
     store.set("revel.ledger", state);
     paint(snap, false, false);
+
+    if (state.cards.length === 1) {
+      toast("YOU WERE GIVEN " + state.allowance + (state.allowance > 1 ? " CARDS" : " CARD") + ". THE LAST ONE IS YOURS.");
+    }
   }
 
   function finish() {
@@ -369,24 +420,22 @@
     el.pctText.textContent = "100%";
     el.card.classList.add("is-scratched");
     el.actions.hidden = false;
+    updateChrome();
 
+    var snap = lastCard();
     var isNew = !state.album[current.id];
     if (isNew) state.album[current.id] = 1;
-
-    state.claims = (state.claims || 0) + 1;
-    state.lastName = el.cardName.textContent.replace("CONFESSOR: ", "");
-    if (state.card) state.card.scratched = true;
+    if (snap) snap.scratched = true;
     store.set("revel.ledger", state);
-
-    el.counterBadge.textContent = "CONFESSED: " + state.claims;
 
     burst(RARITIES[current.rarity].confetti);
 
     var tag = RARITIES[current.rarity].label;
+    var tail = isFinal() ? " · FINAL CARD, THIS ONE IS YOURS" : " · " + drawsLeft() + " DRAW" + (drawsLeft() === 1 ? "" : "S") + " LEFT";
     toast(
-      current.rarity === "legendary" || current.rarity === "epic"
-        ? "★ " + current.title + " ★ (" + tag + ")"
-        : "VERDICT: " + current.title + (isNew ? " · NEW ENTRY" : " · SEEN BEFORE")
+      (current.rarity === "legendary" || current.rarity === "epic" ? "★ " + current.title + " ★ (" + tag + ")" : "VERDICT: " + current.title)
+      + (isNew ? " · NEW ENTRY" : "")
+      + tail
     );
 
     renderCollection(isNew ? current.id : null);
@@ -511,9 +560,14 @@
 
   el.nameForm.addEventListener("submit", function (e) {
     e.preventDefault();
-    if (state.card) { paint(state.card, !!state.card.scratched, false); return; }
+    if (lastCard()) {
+      var lc = lastCard();
+      paint(lc, !!lc.scratched, false);
+      return;
+    }
     var name = (el.nameInput.value || "").trim().toUpperCase().slice(0, 18) || visitor;
     store.set("revel.name", name);
+    state.name = name;
     deal(name);
   });
 
@@ -546,6 +600,10 @@
   el.foil.addEventListener("pointerup", endDraw);
   el.foil.addEventListener("pointercancel", endDraw);
 
+  el.btnAgain.addEventListener("click", function () {
+    deal(state.name || store.get("revel.name", "") || visitor);
+  });
+
   el.btnSave.addEventListener("click", saveCard);
 
   el.btnCollection.addEventListener("click", function () {
@@ -571,15 +629,15 @@
   /* ---------------- boot ---------------- */
 
   el.visitorCode.textContent = "GUEST " + visitor;
-  el.counterBadge.textContent = "CONFESSED: " + (state.claims || 0);
   el.nameInput.value = store.get("revel.name", "");
   renderCollection(null);
 
-  if (state.card && typeof state.card === "object" && findVerdict(state.card.id)) {
-    paint(state.card, !!state.card.scratched, true);
+  if (lastCard()) {
+    var lc = lastCard();
+    paint(lc, !!lc.scratched, true);
   } else {
-    state.card = null;
     el.cardZone.hidden = true;
     el.panelStart.hidden = false;
+    el.counterBadge.textContent = "CARDS: 0/0";
   }
 })();

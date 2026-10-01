@@ -19,8 +19,8 @@
 <div class="marquee" aria-hidden="true">
   <div class="marquee__row">
     <div class="marquee__track">
-      <span>★ REVEL ★ CONFESSION CARD ★ SCRATCH TO CONFESS ★ ONE CARD PER SOUL · NO REROLLS · NO REFUNDS ★</span>
-      <span>★ REVEL ★ CONFESSION CARD ★ SCRATCH TO CONFESS ★ ONE CARD PER SOUL · NO REROLLS · NO REFUNDS ★</span>
+      <span>★ REVEL ★ CONFESSION CARD ★ SCRATCH TO CONFESS ★ ONE TO THREE CARDS PER SOUL · THE LAST ONE IS YOURS ★</span>
+      <span>★ REVEL ★ CONFESSION CARD ★ SCRATCH TO CONFESS ★ ONE TO THREE CARDS PER SOUL · THE LAST ONE IS YOURS ★</span>
     </div>
   </div>
   <div class="marquee__row marquee__row--alt">
@@ -53,10 +53,10 @@
     </p>
     <form class="nameform" id="nameForm" autocomplete="off">
       <label class="nameform__label" for="nameInput">CONFESSOR NAME</label>
-      <input class="nameform__input" id="nameInput" type="text" maxlength="18" placeholder="E.G. ZYREN" spellcheck="false">
+      <input class="nameform__input" id="nameInput" type="text" maxlength="18" placeholder="E.G. REVEL" spellcheck="false">
       <button class="btn btn--big" type="submit">CONFESS</button>
     </form>
-    <p class="hint">tip: drag faster to remove more foil per stroke · one card per person, no take-backs</p>
+    <p class="hint">tip: drag faster to remove more foil per stroke · you draw 1-3 cards, the last one is the card you keep</p>
   </section>
 
   <section class="cardzone" id="cardZone" hidden>
@@ -93,15 +93,22 @@
       </div>
     </div>
 
+    <div class="draws" id="draws">CARDS DRAWN 0 / 0</div>
+
     <div class="progress" id="progress">
       <div class="progress__label">SEAL REMOVED <span id="pctText">0%</span></div>
       <div class="progress__bar"><div class="progress__fill" id="pctFill"></div></div>
     </div>
 
     <div class="actions" id="actions" hidden>
-      <button class="btn" id="btnSave">💾 DOWNLOAD CARD (PNG)</button>
+      <button class="btn" id="btnAgain">↻ CONFESS AGAIN</button>
+      <button class="btn btn--big" id="btnSave">💾 DOWNLOAD CARD (PNG)</button>
       <button class="btn btn--ghost" id="btnCollection">📕 LEDGER</button>
     </div>
+
+    <p class="finalnote" id="finalNote" hidden>
+      ★ THIS IS YOUR CARD. NO DRAWS LEFT — SAVE IT BEFORE YOU CLOSE THE TAB. ★
+    </p>
   </section>
 
 </main>
@@ -113,7 +120,7 @@
     <button class="btn btn--tiny" id="btnCloseCollection">CLOSE ✕</button>
   </div>
   <div class="collection__grid" id="collectionGrid"></div>
-  <p class="hint">Verdicts you have not pulled stay sealed. This card is the only one you get.</p>
+  <p class="hint">Verdicts you have not pulled stay sealed. Every soul draws 1-3 cards and keeps the last one.</p>
 </section>
 
 <div class="toast" id="toast" hidden></div>
