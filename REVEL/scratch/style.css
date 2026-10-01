@@ -455,8 +455,9 @@ body{
 /* ---------- toast ---------- */
 
 .toast{
-  position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%);
+  position: fixed; left: 50%; top: 14px; transform: translateX(-50%);
   z-index: 950;
+  pointer-events: none;
   font-family: var(--pixel); font-size: 9px; line-height: 1.6;
   background: var(--lime); color: var(--ink);
   border: var(--edge) solid var(--ink);
@@ -465,7 +466,7 @@ body{
   max-width: 88vw; text-align: center;
   animation: toastIn .25s steps(3);
 }
-@keyframes toastIn{ from{ transform: translate(-50%, 20px); opacity: 0; } }
+@keyframes toastIn{ from{ transform: translate(-50%, -24px); opacity: 0; } }
 
 /* confetti bits */
 .confetti{

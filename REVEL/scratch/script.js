@@ -42,16 +42,11 @@
     return id;
   })();
 
-  var state = store.get("revel.ledger", null) || {};
+  var state = store.get("revel.ledger2", null) || {};
   if (!state.album || typeof state.album !== "object") state.album = {};
   if (!Array.isArray(state.cards)) state.cards = [];
   if (typeof state.allowance !== "number") state.allowance = 0;
   if (typeof state.name !== "string") state.name = "";
-  if (state.card && findVerdict(state.card.id)) {
-    state.cards = [state.card];
-    if (!state.allowance) state.allowance = 1;
-  }
-  state.card = null;
   var KNOWN = {};
   VERDICTS.forEach(function (v) { KNOWN[v.id] = true; });
   state.cards = state.cards.filter(function (c) { return c && findVerdict(c.id); });
@@ -325,9 +320,8 @@
   function updateChrome() {
     var left = drawsLeft();
     el.counterBadge.textContent = "CARDS: " + state.cards.length + "/" + state.allowance;
-    el.draws.textContent = isFinal()
-      ? "FINAL CARD · NO DRAWS LEFT"
-      : "CARDS DRAWN " + state.cards.length + " / " + state.allowance + " · " + left + " LEFT";
+    el.draws.textContent = "CARDS DRAWN " + state.cards.length + " / " + state.allowance +
+      (isFinal() ? " · NO DRAWS LEFT" : " · " + left + " LEFT");
 
     el.btnAgain.hidden = isFinal();
     el.btnAgain.textContent = left > 1
@@ -401,7 +395,7 @@
       scratched: false
     };
     state.cards.push(snap);
-    store.set("revel.ledger", state);
+    store.set("revel.ledger2", state);
     paint(snap, false, false);
 
     if (state.cards.length === 1) {
@@ -426,7 +420,7 @@
     var isNew = !state.album[current.id];
     if (isNew) state.album[current.id] = 1;
     if (snap) snap.scratched = true;
-    store.set("revel.ledger", state);
+    store.set("revel.ledger2", state);
 
     burst(RARITIES[current.rarity].confetti);
 
