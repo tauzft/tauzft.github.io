@@ -5,6 +5,8 @@
 (function () {
   "use strict";
 
+  var ALLOWANCE = 3;
+
   var RARITIES = {
     common:    { label: "COMMON",    chance: 30, confetti: 0,  note: "unremarkable" },
     uncommon:  { label: "UNCOMMON",  chance: 30, confetti: 26, note: "almost something" },
@@ -45,7 +47,6 @@
   var state = store.get("revel.ledger2", null) || {};
   if (!state.album || typeof state.album !== "object") state.album = {};
   if (!Array.isArray(state.cards)) state.cards = [];
-  if (typeof state.allowance !== "number") state.allowance = 0;
   if (typeof state.name !== "string") state.name = "";
   var KNOWN = {};
   VERDICTS.forEach(function (v) { KNOWN[v.id] = true; });
@@ -301,16 +302,12 @@
     return null;
   }
 
-  function rollAllowance() {
-    return 1 + Math.floor(Math.random() * 3);
-  }
-
   function lastCard() {
     return state.cards.length ? state.cards[state.cards.length - 1] : null;
   }
 
   function drawsLeft() {
-    return Math.max(0, state.allowance - state.cards.length);
+    return Math.max(0, ALLOWANCE - state.cards.length);
   }
 
   function isFinal() {
@@ -319,8 +316,8 @@
 
   function updateChrome() {
     var left = drawsLeft();
-    el.counterBadge.textContent = "CARDS: " + state.cards.length + "/" + state.allowance;
-    el.draws.textContent = "CARDS DRAWN " + state.cards.length + " / " + state.allowance +
+    el.counterBadge.textContent = "CARDS: " + state.cards.length + "/" + ALLOWANCE;
+    el.draws.textContent = "CARDS DRAWN " + state.cards.length + " / " + ALLOWANCE +
       (isFinal() ? " · NO DRAWS LEFT" : " · " + left + " LEFT");
 
     el.btnAgain.hidden = isFinal();
@@ -343,8 +340,8 @@
     el.cardName.textContent = "CONFESSOR: " + (snap.name || visitor);
     el.cardSerial.textContent = snap.serial || "CONF 0000";
     el.cardDrop.textContent = isFinal()
-      ? "FINAL " + state.cards.length + "/" + state.allowance
-      : "DRAW " + state.cards.length + "/" + state.allowance;
+      ? "FINAL " + state.cards.length + "/" + ALLOWANCE
+      : "DRAW " + state.cards.length + "/" + ALLOWANCE;
 
     revealed = !!restored;
     drawing = false;
@@ -383,7 +380,7 @@
 
   function deal(name) {
     if (isFinal()) return;
-    if (!state.allowance) state.allowance = rollAllowance();
+    state.allowance = ALLOWANCE;
 
     var v = rollVerdict();
     var n = state.cards.length + 1;
@@ -391,7 +388,7 @@
       id: v.id,
       name: name,
       serial: serialFor(v, n),
-      drop: "DRAW " + n + "/" + state.allowance,
+      drop: "DRAW " + n + "/" + ALLOWANCE,
       scratched: false
     };
     state.cards.push(snap);
@@ -399,7 +396,7 @@
     paint(snap, false, false);
 
     if (state.cards.length === 1) {
-      toast("YOU WERE GIVEN " + state.allowance + (state.allowance > 1 ? " CARDS" : " CARD") + ". THE LAST ONE IS YOURS.");
+      toast("YOU WERE GIVEN " + ALLOWANCE + (ALLOWANCE > 1 ? " CARDS" : " CARD") + ". THE LAST ONE IS YOURS.");
     }
   }
 
