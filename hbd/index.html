@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <title>A Bouquet For You</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Playfair+Display:ital@1&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="stage">
+        <h1>A bouquet for you</h1>
+        <div id="hint"></div>
+        <svg id="wrap" viewBox="0 0 160 150">
+            <path d="M6 8 Q80 -2 154 8 L100 146 Q80 152 60 146Z" fill="#fffdf0" stroke="#d6d09a" />
+            <path d="M6 8 L80 44 L154 8 Q80 -2 6 8Z" fill="#cfe8b8" stroke="#9cc27f" />
+            <path d="M80 44 L68 146 M80 44 L92 146" stroke="#d6d09a" stroke-width="1" fill="none" opacity=".6" />
+            <path d="M80 54 Q52 30 48 56 Q60 70 80 54Z M80 54 Q108 30 112 56 Q100 70 80 54Z" fill="#f5d04a" />
+            <path d="M80 56 L66 92 L76 86Z M80 56 L94 92 L84 86Z" fill="#e0b53a" />
+            <circle cx="80" cy="54" r="7" fill="#c99a1c" />
+        </svg>
+    </div>
+    <button id="btn">Make a bouquet</button>
+    <div id="overlay">
+        <div id="paper">
+            <div id="fname"></div>
+            <div id="msg"></div><small>(tap anywhere to close)</small>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
