@@ -8,19 +8,21 @@
   var ALLOWANCE = 3;
 
   var RARITIES = {
-    common:    { label: "COMMON",    chance: 30, confetti: 0,  note: "unremarkable" },
-    uncommon:  { label: "UNCOMMON",  chance: 30, confetti: 26, note: "almost something" },
-    rare:      { label: "RARE",      chance: 20, confetti: 54, note: "took a while" },
-    epic:      { label: "EPIC",      chance: 15, confetti: 90, note: "heavy envelope" },
-    legendary: { label: "LEGENDARY", chance: 5,  confetti: 140, note: "not our doing" }
+    common: { label: "COMMON", chance: 30, confetti: 0, note: "unremarkable" },
+    uncommon: { label: "UNCOMMON", chance: 25, confetti: 26, note: "almost something" },
+    rare: { label: "RARE", chance: 20, confetti: 54, note: "took a while" },
+    ultraRare: { label: "ULTRA-RARE", chance: 12, confetti: 90, note: "heavy envelope" },
+    epic: { label: "EPIC", chance: 8, confetti: 120, note: "not our doing" },
+    legendary: { label: "LEGENDARY", chance: 5, confetti: 160, note: "beyond us entirely" }
   };
 
   var VERDICTS = [
-    { id: "v01", rarity: "common",    icon: "🩸", title: "KEEP YOUR SIN",     line: "Nobody took it from you. It stays yours, and it is not getting lighter." },
-    { id: "v02", rarity: "uncommon",  icon: "👁️", title: "REVEL KNOWS",       line: "We saw all of it. Running will not help — the file was updated first." },
-    { id: "v03", rarity: "rare",      icon: "⛓️", title: "DAMNED",            line: "You took the long way on purpose. This is where that road ends." },
-    { id: "v04", rarity: "epic",      icon: "🕊️", title: "HEAVEN MISSED YOU", line: "They waited. They missed you. Nobody is coming to fix this one." },
-    { id: "v05", rarity: "legendary", icon: "👼", title: "FORGIVEN",          line: "They were listening the whole time. You are forgiven — do not make us ask twice." }
+    { id: "v01", rarity: "common", icon: "💬", title: "THE DOUBLE TEXT", line: "You will have to decide what pride is worth keeping." },
+    { id: "v02", rarity: "uncommon", icon: "📞", title: "THE MISSED CALL", line: "What could have been will remain just beyond your reach." },
+    { id: "v03", rarity: "rare", icon: "👁️", title: "THE LAST SEEN", line: "What you discover may change how you remember them." },
+    { id: "v04", rarity: "ultraRare", icon: "⏳", title: "THE PENDING", line: "The answer exists, but the time is not yet yours to know." },
+    { id: "v05", rarity: "epic", icon: "🚪", title: "THE OPEN DOOR", line: "An unexpected connection awaits beyond it." },
+    { id: "v06", rarity: "legendary", icon: "📭", title: "THE RETURNING MESSAGE", line: "What was lost finds its way back to you." }
   ];
 
   var store = {
@@ -31,7 +33,7 @@
       } catch (e) { return fallback; }
     },
     set: function (k, v) {
-      try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {}
+      try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { }
     }
   };
 
@@ -74,6 +76,7 @@
     btnAgain: document.getElementById("btnAgain"),
     draws: document.getElementById("draws"),
     finalNote: document.getElementById("finalNote"),
+    btnNewRound: document.getElementById("btnNewRound"),
     btnSave: document.getElementById("btnSave"),
     btnCollection: document.getElementById("btnCollection"),
     collection: document.getElementById("collection"),
@@ -269,22 +272,22 @@
 
   /* ---------------- verdict roll ---------------- */
 
-  function rollRarity() {
-    var r = Math.random() * 100;
-    var acc = 0;
-    var keys = ["common", "uncommon", "rare", "epic", "legendary"];
-    for (var i = 0; i < keys.length; i++) {
-      acc += RARITIES[keys[i]].chance;
-      if (r < acc) return keys[i];
-    }
-    return "common";
-  }
+  function rollVerdict(exclude) {
+    var used = exclude || {};
+    var pool = VERDICTS.filter(function (v) { return !used[v.id]; });
+    if (!pool.length) pool = VERDICTS.slice();
 
-  function rollVerdict() {
-    var rar = rollRarity();
-    var pool = VERDICTS.filter(function (v) { return v.rarity === rar; });
-    if (!pool.length) return VERDICTS[0];
-    return pool[Math.floor(Math.random() * pool.length)];
+    var total = pool.reduce(function (sum, v) {
+      return sum + RARITIES[v.rarity].chance;
+    }, 0);
+
+    var r = Math.random() * total;
+    var acc = 0;
+    for (var i = 0; i < pool.length; i++) {
+      acc += RARITIES[pool[i].rarity].chance;
+      if (r < acc) return pool[i];
+    }
+    return pool[pool.length - 1];
   }
 
   function serialFor(verdict, round) {
@@ -325,6 +328,7 @@
       ? "↻ CONFESS AGAIN · " + left + " LEFT"
       : "↻ CONFESS AGAIN · LAST ONE";
     el.finalNote.hidden = !isFinal();
+    el.btnNewRound.hidden = !isFinal();
   }
 
   function paint(snap, restored, instant) {
@@ -366,11 +370,14 @@
       el.pctText.textContent = "0%";
       el.progress.classList.remove("is-done");
       el.card.classList.remove("is-scratched");
-      el.foil.style.opacity = "1";
+      el.foil.style.transition = "none";
       el.foil.style.pointerEvents = "auto";
+      el.foil.style.opacity = "1";
       el.actions.hidden = true;
+      fitFoil();
       requestAnimationFrame(function () {
         fitFoil();
+        el.foil.style.transition = "";
         el.card.classList.add("just-revealed");
       });
     }
@@ -382,7 +389,9 @@
     if (isFinal()) return;
     state.allowance = ALLOWANCE;
 
-    var v = rollVerdict();
+    var used = {};
+    state.cards.forEach(function (c) { used[c.id] = true; });
+    var v = rollVerdict(used);
     var n = state.cards.length + 1;
     var snap = {
       id: v.id,
@@ -593,6 +602,15 @@
 
   el.btnAgain.addEventListener("click", function () {
     deal(state.name || store.get("revel.name", "") || visitor);
+  });
+
+  el.btnNewRound.addEventListener("click", function () {
+    if (!isFinal()) return;
+    state.cards = [];
+    state.album = {};
+    state.allowance = ALLOWANCE;
+    store.set("revel.ledger2", state);
+    location.reload();
   });
 
   el.btnSave.addEventListener("click", saveCard);
