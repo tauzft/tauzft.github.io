@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>REVEL // CONFESSION CARD</title>
+<meta name="description" content="Interactive scratch card. Scratch the foil to confess, reveal your verdict. Six possible outcomes from FORGIVEN to DAMNED.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="scanlines" aria-hidden="true"></div>
+<div class="starfield" id="starfield" aria-hidden="true"></div>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__row">
+    <div class="marquee__track">
+      <span>★ REVEL ★ CONFESSION CARD ★ SCRATCH TO CONFESS ★ ONE TO THREE CARDS PER SOUL · THE LAST ONE IS YOURS ★</span>
+      <span>★ REVEL ★ CONFESSION CARD ★ SCRATCH TO CONFESS ★ ONE TO THREE CARDS PER SOUL · THE LAST ONE IS YOURS ★</span>
+    </div>
+  </div>
+  <div class="marquee__row marquee__row--alt">
+    <div class="marquee__track">
+      <span>◆ BEST VIEWED AT 800×600 ◆ INTERACTIVE ◇ LOADING... 100% ◆ REVEL IS WATCHING ◆ FIVE VERDICTS ONLY ◆</span>
+      <span>◆ BEST VIEWED AT 800×600 ◆ INTERACTIVE ◇ LOADING... 100% ◆ REVEL IS WATCHING ◆ FIVE VERDICTS ONLY ◆</span>
+    </div>
+  </div>
+</div>
+
+<header class="site-head">
+  <div class="logo">
+    <span class="logo__block">R</span><span class="logo__block">E</span><span class="logo__block">V</span><span class="logo__block">E</span><span class="logo__block">L</span>
+  </div>
+  <p class="tagline">for the damned and divine.</p>
+  <div class="badges">
+    <span class="badge badge--cyan">5 verdicts</span>
+    <span class="badge badge--lime" id="counterBadge">CONFESSED: 0</span>
+  </div>
+</header>
+
+<main class="stage">
+
+  <section class="panel" id="panelStart">
+    <h2 class="panel__title">SCRATCH TO CONFESS</h2>
+    <p class="panel__body">
+      One card. One verdict. Enter your name, then <strong>drag the cursor</strong>
+      across the foil to reveal what the verdict is. Five verdicts exist and
+      <strong>FORGIVEN</strong> is the hardest one to pull.
+    </p>
+    <form class="nameform" id="nameForm" autocomplete="off">
+      <label class="nameform__label" for="nameInput">CONFESSOR NAME</label>
+      <input class="nameform__input" id="nameInput" type="text" maxlength="18" placeholder="E.G. REVEL" spellcheck="false">
+      <button class="btn btn--big" type="submit">CONFESS</button>
+    </form>
+    <p class="hint">tip: drag faster to remove more foil per stroke · you draw 1-3 cards, the last one is the card you keep</p>
+  </section>
+
+  <section class="cardzone" id="cardZone" hidden>
+    <div class="card" id="card" data-rarity="common">
+      <div class="card__inner">
+        <div class="card__grain" aria-hidden="true"></div>
+
+        <div class="card__head">
+          <span class="card__brand">REVEL</span>
+          <span class="card__serial" id="cardSerial">CONF 0000</span>
+        </div>
+
+        <div class="card__rarity" id="cardRarity">SEALED</div>
+
+        <div class="card__art">
+          <div class="card__icon" id="cardIcon">?</div>
+          <div class="card__shine" aria-hidden="true"></div>
+        </div>
+
+        <h3 class="card__title" id="cardTitle">—</h3>
+        <p class="card__line" id="cardLine">—</p>
+
+        <div class="card__meta">
+          <span class="card__name" id="cardName">CONFESSOR: ______</span>
+          <span class="card__drop" id="cardDrop">DROP 01</span>
+        </div>
+
+        <canvas class="card__foil" id="foil" aria-label="Scratch to confess and reveal your verdict"></canvas>
+
+        <div class="card__hint" id="cardHint">
+          <span class="card__hint-arrow">◀ ▶</span>
+          DRAG TO CONFESS
+        </div>
+      </div>
+    </div>
+
+    <div class="draws" id="draws">CARDS DRAWN 0 / 0</div>
+
+    <div class="progress" id="progress">
+      <div class="progress__label">SEAL REMOVED <span id="pctText">0%</span></div>
+      <div class="progress__bar"><div class="progress__fill" id="pctFill"></div></div>
+    </div>
+
+    <div class="actions" id="actions" hidden>
+      <button class="btn" id="btnAgain">↻ CONFESS AGAIN</button>
+      <button class="btn btn--big" id="btnSave">💾 DOWNLOAD CARD (PNG)</button>
+      <button class="btn btn--ghost" id="btnCollection">📕 LEDGER</button>
+    </div>
+
+    <p class="finalnote" id="finalNote" hidden>
+      ★ THIS IS YOUR CARD. NO MORE DRAWS — SAVE IT BEFORE YOU CLOSE THE TAB. ★
+    </p>
+  </section>
+
+</main>
+
+<section class="collection" id="collection" hidden>
+  <div class="collection__head">
+    <h2 class="panel__title">LEDGER</h2>
+    <p class="collection__count" id="collectionCount">0 / 0 SEEN</p>
+    <button class="btn btn--tiny" id="btnCloseCollection">CLOSE ✕</button>
+  </div>
+  <div class="collection__grid" id="collectionGrid"></div>
+  <p class="hint">Verdicts you have not pulled stay sealed. Every soul draws 1-3 cards and keeps the last one.</p>
+</section>
+
+<div class="toast" id="toast" hidden></div>
+
+<footer class="site-foot">
+  <p>REVEL LABS ©2004—2026 · all verdicts randomly generated · <span id="visitorCode">GUEST</span></p>
+  <p class="site-foot__blink">▪ WHAT IS SCRATCHED CANNOT BE UNSCRATCHED ▪</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
